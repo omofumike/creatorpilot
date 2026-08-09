@@ -1,0 +1,14 @@
+{
+  "name": "creatorpilot",
+  "version": "1.0.0",
+  "description": "Autonomous AI agent pipeline for solo content creators",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.16.0",
+    "dotenv": "^17.4.2"
+  }
+}
