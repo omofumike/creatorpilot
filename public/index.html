@@ -904,7 +904,6 @@
           <button class="tab-btn" onclick="switchTab(event, 'tab-storyboard')">🎨 Storyboard</button>
           <button class="tab-btn" onclick="switchTab(event, 'tab-production')">⚙️ Production Plan</button>
           <button class="tab-btn" onclick="switchTab(event, 'tab-quality')">🛡️ Quality Audit</button>
-          <button class="tab-btn" onclick="switchTab(event, 'tab-raw')">🔌 Raw Output</button>
         </div>
 
         <!-- Panel: Research Brief -->
@@ -1008,13 +1007,6 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Panel: Raw -->
-        <div id="tab-raw" class="tab-panel">
-          <h3>Full Pipeline Output Package (JSON)</h3>
-          <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 1rem;">This contains the complete, unmutated sequential data flow payload across all completed pipeline stages.</p>
-          <pre class="json-pre" id="raw-json-viewer"></pre>
         </div>
       </div>
     </div>
@@ -1239,7 +1231,12 @@
       
       const findingsList = document.getElementById('research-findings');
       findingsList.innerHTML = '';
-      const findings = brief.keyResearchPoints || brief.findings || [];
+      const findings = [
+        ...(brief.keyFacts || []),
+        ...(brief.statistics || []),
+        ...(brief.recentDevelopments || []),
+        ...(brief.importantContext || [])
+      ];
       if (findings.length > 0) {
         findings.forEach(f => {
           const li = document.createElement('li');
@@ -1254,7 +1251,11 @@
 
       const recsList = document.getElementById('research-recommendations');
       recsList.innerHTML = '';
-      const recs = brief.recommendations || brief.opportunities || [];
+      const recs = [
+        ...(brief.recommendations || []),
+        ...(brief.opportunities || []),
+        ...(brief.risksChallenges || [])
+      ];
       if (recs.length > 0) {
         recs.forEach(r => {
           const li = document.createElement('li');
@@ -1262,19 +1263,9 @@
           recsList.appendChild(li);
         });
       } else {
-        // Fallback or list opportunities if present
-        const fallback = brief.opportunities || brief.risks || [];
-        if (fallback.length > 0) {
-          fallback.forEach(f => {
-            const li = document.createElement('li');
-            li.textContent = f;
-            recsList.appendChild(li);
-          });
-        } else {
-          const li = document.createElement('li');
-          li.textContent = 'No specific recommendations returned.';
-          recsList.appendChild(li);
-        }
+        const li = document.createElement('li');
+        li.textContent = 'No specific recommendations returned.';
+        recsList.appendChild(li);
       }
 
       // 3. Render Script Tab
