@@ -1220,9 +1220,6 @@
       statusBadge.textContent = result.status || 'WARNING';
       statusBadge.className = 'badge-status ' + (result.status || 'WARNING');
 
-      // Save raw json to raw viewer
-      document.getElementById('raw-json-viewer').textContent = JSON.stringify(result, null, 2);
-
       const pkg = result.finalPackage || {};
 
       // 2. Render Research Tab
