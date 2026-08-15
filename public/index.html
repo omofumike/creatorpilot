@@ -1171,6 +1171,12 @@
       </button>
     </div>
 
+    <!-- CreatorPilot Production Library -->
+    <div
+      id="creatorpilot-production-library"
+      class="card"
+      style="margin-bottom:20px;"
+    ></div>
     <!-- Main Workspace -->
     <div class="main-workspace">
       <!-- AI Production Section -->
@@ -1461,7 +1467,85 @@
     const downloadWordBtn = document.getElementById('download-word-btn');
     const downloadPdfBtn = document.getElementById('download-pdf-btn');
 
-    let currentResult = null;
+    let currentResult = null; 
+// ==========================================
+// LOCAL PRODUCTION PERSISTENCE
+// ==========================================
+
+const CREATORPILOT_STORAGE_KEY = 'CREATORPILOT_CURRENT_PRODUCTION_V1';
+
+function saveCurrentProduction() {
+  try {
+    if (!currentResult) return;
+
+    const savedProduction = {
+      result: currentResult,
+      topic: currentResult.topic || topicInput?.value || '',
+      savedAt: new Date().toISOString()
+    };
+
+    localStorage.setItem(
+      CREATORPILOT_STORAGE_KEY,
+      JSON.stringify(savedProduction)
+    );
+
+    console.log('[CreatorPilot] Production saved locally.');
+  } catch (error) {
+    console.warn(
+      '[CreatorPilot] Could not save production locally:',
+      error
+    );
+  }
+}
+
+function restoreCurrentProduction() {
+  try {
+    const saved = localStorage.getItem(
+      CREATORPILOT_STORAGE_KEY
+    );
+
+    if (!saved) {
+      console.log('[CreatorPilot] No saved production found.');
+      return;
+    }
+
+    const parsed = JSON.parse(saved);
+
+    if (!parsed || !parsed.result) {
+      console.warn(
+        '[CreatorPilot] Saved production is invalid.'
+      );
+      return;
+    }
+
+    currentResult = parsed.result;
+
+    if (topicInput) {
+      topicInput.value =
+        parsed.topic ||
+        currentResult.topic ||
+        '';
+    }
+
+    renderPipelineResults(currentResult);
+
+    resultsContainer.style.display = 'block';
+
+    if (typeof updateCrewAfterResult === 'function') {
+      updateCrewAfterResult(currentResult);
+    }
+
+    console.log(
+      '[CreatorPilot] Production restored after refresh.'
+    );
+
+  } catch (error) {
+    console.warn(
+      '[CreatorPilot] Could not restore production:',
+      error
+    );
+  }
+}
 
     // Secure HTML Escaper Helper
     function escapeHtml(unsafe) {
@@ -2061,6 +2145,8 @@ function stopLoadingMessageRotation() {
         loadingContainer.style.display = 'none';
 
         currentResult = data;
+        saveCurrentProduction();
+        saveProductionToLibrary(currentResult);
         renderPipelineResults(data);
         resultsContainer.style.display = 'block'; // Show results
         resultsContainer.scrollIntoView({ behavior: 'smooth' });
@@ -2112,6 +2198,339 @@ function stopLoadingMessageRotation() {
         }
       });
     }
+
+    // ==========================================
+    // CREATORPILOT_MULTI_LIBRARY_V1
+    // Multiple saved productions
+    // ==========================================
+
+    const CREATORPILOT_LIBRARY_KEY =
+      'CREATORPILOT_PRODUCTION_LIBRARY_V1';
+
+    function getProductionLibrary() {
+      try {
+        const saved =
+          localStorage.getItem(
+            CREATORPILOT_LIBRARY_KEY
+          );
+
+        if (!saved) return [];
+
+        const parsed =
+          JSON.parse(saved);
+
+        return Array.isArray(parsed)
+          ? parsed
+          : [];
+
+      } catch (error) {
+        console.warn(
+          '[CreatorPilot] Could not load production library:',
+          error
+        );
+
+        return [];
+      }
+    }
+
+    function saveProductionLibrary(productions) {
+      try {
+        localStorage.setItem(
+          CREATORPILOT_LIBRARY_KEY,
+          JSON.stringify(productions)
+        );
+
+        console.log(
+          '[CreatorPilot] Production library saved.'
+        );
+
+      } catch (error) {
+        console.warn(
+          '[CreatorPilot] Could not save production library:',
+          error
+        );
+      }
+    }
+
+    function createProductionId() {
+      return (
+        'production-' +
+        Date.now() +
+        '-' +
+        Math.random()
+          .toString(36)
+          .substring(2, 8)
+      );
+    }
+
+    function saveProductionToLibrary(result) {
+      if (!result) return;
+
+      try {
+        if (!result.id) {
+          result.id =
+            createProductionId();
+        }
+
+        const productions =
+          getProductionLibrary();
+
+        const production = {
+          id: result.id,
+
+          topic:
+            result.topic ||
+            topicInput?.value ||
+            'Untitled Production',
+
+          result: result,
+
+          savedAt:
+            new Date().toISOString()
+        };
+
+        const existingIndex =
+          productions.findIndex(
+            item =>
+              item.id === production.id
+          );
+
+        if (existingIndex >= 0) {
+          productions[existingIndex] =
+            production;
+        } else {
+          productions.unshift(
+            production
+          );
+        }
+
+        saveProductionLibrary(
+          productions
+        );
+
+        console.log(
+          '[CreatorPilot] Saved production to library:',
+          production.id
+        );
+
+        renderProductionLibrary();
+
+      } catch (error) {
+        console.warn(
+          '[CreatorPilot] Could not save production to library:',
+          error
+        );
+      }
+    }
+
+    function loadProductionFromLibrary(id) {
+      const productions =
+        getProductionLibrary();
+
+      return productions.find(
+        production =>
+          production.id === id
+      );
+    }
+
+    function selectSavedProduction(id) {
+      const production =
+        loadProductionFromLibrary(id);
+
+      if (
+        !production ||
+        !production.result
+      ) {
+        return;
+      }
+
+      currentResult = {
+        ...production.result,
+        id: production.id
+      };
+
+      if (topicInput) {
+        topicInput.value =
+          production.topic ||
+          currentResult.topic ||
+          '';
+      }
+
+      renderPipelineResults(
+        currentResult
+      );
+
+      resultsContainer.style.display =
+        'block';
+
+      mainWorkspace.style.display =
+        'grid';
+
+      createProductionCard.style.display =
+        'none';
+
+      if (
+        typeof updateCrewAfterResult ===
+        'function'
+      ) {
+        updateCrewAfterResult(
+          currentResult
+        );
+      }
+
+      renderProductionLibrary();
+
+      console.log(
+        '[CreatorPilot] Loaded production:',
+        production.id
+      );
+    }
+
+    function renderProductionLibrary() {
+      let library =
+        document.getElementById(
+          'creatorpilot-production-library'
+        );
+
+      if (!library) {
+        library =
+          document.createElement('div');
+
+        library.id =
+          'creatorpilot-production-library';
+
+        library.style.cssText =
+          'margin:16px 0;padding:14px;' +
+          'border:1px solid rgba(255,255,255,.12);' +
+          'border-radius:14px;' +
+          'background:rgba(255,255,255,.03);';
+
+        const anchor =
+          createProductionCard ||
+          document.querySelector(
+            '.main-workspace'
+          );
+
+        if (anchor && anchor.parentNode) {
+          anchor.parentNode.insertBefore(
+            library,
+            anchor.nextSibling
+          );
+        }
+      }
+
+      if (!library) return;
+
+      const productions =
+        getProductionLibrary();
+
+      if (!productions.length) {
+        library.innerHTML =
+          '<strong>My Productions</strong>' +
+          '<div style="opacity:.65;margin-top:6px;">' +
+          'No saved productions yet.' +
+          '</div>';
+
+        return;
+      }
+
+      let html =
+        '<div style="display:flex;' +
+        'align-items:center;gap:10px;' +
+        'flex-wrap:wrap;">';
+
+      html +=
+        '<strong>My Productions</strong>';
+
+      html +=
+        '<select id="creatorpilot-production-selector" ' +
+        'style="flex:1;min-width:240px;' +
+        'padding:10px;border-radius:10px;">';
+
+      productions.forEach(
+        production => {
+
+          const selected =
+            currentResult &&
+            currentResult.id ===
+              production.id
+              ? ' selected'
+              : '';
+
+          html +=
+            '<option value="' +
+            escapeHtml(production.id) +
+            '"' +
+            selected +
+            '>' +
+            escapeHtml(
+              production.topic ||
+              'Untitled Production'
+            ) +
+            '</option>';
+        }
+      );
+
+      html +=
+        '</select></div>';
+
+      html +=
+        '<div style="margin-top:7px;' +
+        'font-size:.85rem;opacity:.65;">' +
+        productions.length +
+        ' saved production' +
+        (productions.length === 1 ? '' : 's') +
+        '</div>';
+
+      library.innerHTML =
+        html;
+
+      const selector =
+        document.getElementById(
+          'creatorpilot-production-selector'
+        );
+
+      if (selector) {
+        selector.addEventListener(
+          'change',
+          event => {
+            console.log(
+              '[CreatorPilot] Production selector changed:',
+              event.target.value
+            );
+
+            console.log(
+              '[CreatorPilot] Library:',
+              getProductionLibrary()
+            );
+
+            selectSavedProduction(
+              event.target.value
+            );
+          }
+        );
+      }
+    }
+    // AI_CREW_REFRESH_RESTORE_V1
+    // Restore the latest production after browser refresh.
+    setTimeout(() => {
+      restoreCurrentProduction();
+    }, 0);
+    // CREATORPILOT_LIBRARY_INITIAL_RENDER_V1
+    // Render saved productions when the page loads.
+    setTimeout(() => {
+      try {
+        renderProductionLibrary();
+        console.log(
+          '[CreatorPilot] Production library rendered on page load.'
+        );
+      } catch (error) {
+        console.warn(
+          '[CreatorPilot] Could not render production library on load:',
+          error
+        );
+      }
+    }, 100);
     // Dynamic Result Rendering function
     function renderPipelineResults(result) {
       currentResult = result || currentResult;
@@ -2826,3 +3245,14 @@ if (document.readyState === 'loading') {
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
