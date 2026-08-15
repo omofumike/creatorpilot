@@ -2701,6 +2701,16 @@ function stopLoadingMessageRotation() {
         '<strong>My Productions</strong>';
 
       html +=
+        '<div style="margin-top:12px;margin-bottom:12px;">' +
+        '<button type="button" ' +
+        'id="creatorpilot-start-new-production" ' +
+        'class="secondary-btn" ' +
+        'style="width:100%;">' +
+        '+ Start New Production' +
+        '</button>' +
+        '</div>';
+
+      html +=
         '<select id="creatorpilot-production-selector" ' +
         'style="flex:1;min-width:240px;' +
         'padding:10px;border-radius:10px;">';
@@ -2748,6 +2758,38 @@ function stopLoadingMessageRotation() {
       library.innerHTML =
         html;
 
+      // CREATORPILOT_START_NEW_PRODUCTION_V1
+      const startNewProductionBtn =
+        document.getElementById(
+          'creatorpilot-start-new-production'
+        );
+
+      if (startNewProductionBtn) {
+        startNewProductionBtn.addEventListener(
+          'click',
+          () => {
+            currentResult = null;
+
+            if (topicInput) {
+              topicInput.value = '';
+              topicInput.focus();
+            }
+
+            setCrewIdleState();
+
+            if (
+              typeof renderProductionLibrary ===
+              'function'
+            ) {
+              renderProductionLibrary();
+            }
+
+            console.log(
+              '[CreatorPilot] Started a new production.'
+            );
+          }
+        );
+      }
       const selector =
         document.getElementById(
           'creatorpilot-production-selector'
@@ -3508,6 +3550,8 @@ if (document.readyState === 'loading') {
 
 </body>
 </html>
+
+
 
 
 
