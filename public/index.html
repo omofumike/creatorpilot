@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CreatorPilot - Judge's Dashboard</title>
+  <title>CreatorPilot</title>
   <style>
     /* Reset and Base Styles */
     * {
@@ -12,16 +12,35 @@
       padding: 0;
     }
 
+    :root {
+      --bg: #07111f;
+      --bg-elevated: #0f1b2a;
+      --panel: #101d2e;
+      --panel-soft: #121f31;
+      --panel-strong: #162437;
+      --border: rgba(148, 163, 184, 0.18);
+      --muted: #8aa0b9;
+      --text: #edf4ff;
+      --subtitle: #afc0d8;
+      --accent: #7c5cff;
+      --accent-strong: #6d4df8;
+      --accent-soft: rgba(124, 92, 255, 0.12);
+      --green: #3cd29a;
+      --green-soft: rgba(60, 210, 154, 0.15);
+      --warning: #f3c66c;
+      --shadow: 0 20px 50px rgba(2, 6, 23, 0.45);
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-      background-color: #0f172a;
-      color: #e2e8f0;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.5;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem 2rem;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1220px;
       margin: 0 auto;
     }
 
@@ -30,9 +49,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2.5rem;
-      border-bottom: 1px solid #334155;
-      padding-bottom: 1.5rem;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 0.75rem 0 1.1rem;
+      border-bottom: 1px solid var(--border);
     }
 
     .logo-container {
@@ -42,764 +62,1078 @@
     }
 
     .logo-icon {
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 1.25rem;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      font-weight: 800;
+      font-size: 1.1rem;
+      box-shadow: 0 10px 22px rgba(124, 92, 255, 0.35);
     }
 
     .logo-text h1 {
-      font-size: 1.5rem;
+      font-size: clamp(1.35rem, 2vw, 1.8rem);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      color: var(--text);
       font-weight: 800;
-      background: linear-gradient(to right, #e2e8f0, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -0.025em;
     }
 
     .logo-text p {
       font-size: 0.8rem;
-      color: #64748b;
+      color: var(--muted);
+      margin-top: 0.08rem;
     }
 
     .status-badge {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.85rem;
-      background-color: #1e293b;
-      padding: 0.35rem 0.75rem;
-      border-radius: 9999px;
-      border: 1px solid #334155;
+      gap: 0.7rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(15, 28, 40, 0.9);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .status-badge-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.1rem;
+      line-height: 1.15;
+    }
+
+    .status-badge-stack strong {
+      font-size: 0.78rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .status-badge-stack span {
+      font-size: 0.7rem;
+      color: var(--muted);
     }
 
     .status-dot {
-      width: 8px;
-      height: 8px;
-      background-color: #10b981;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
-      display: inline-block;
-      box-shadow: 0 0 8px #10b981;
+      background: var(--green);
+      box-shadow: 0 0 14px rgba(60, 210, 154, 0.85);
     }
 
     .status-dot.loading {
-      background-color: #f59e0b;
-      box-shadow: 0 0 8px #f59e0b;
+      background: var(--warning);
+      box-shadow: 0 0 12px rgba(243, 198, 108, 0.8);
     }
 
     .status-dot.error {
-      background-color: #ef4444;
-      box-shadow: 0 0 8px #ef4444;
+      background: #ff6b74;
+      box-shadow: 0 0 12px rgba(255, 107, 116, 0.8);
     }
 
-    /* Main Dashboard Layout */
+    /* General Layout */
     .dashboard-grid {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1.25rem;
     }
 
-    /* Input Card */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     .card {
-      background-color: #1e293b;
-      border-radius: 12px;
-      border: 1px solid #334155;
-      padding: 2rem;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(180deg, rgba(17, 27, 39, 0.98), rgba(12, 20, 31, 0.96));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
     }
 
-    .card h2 {
-      font-size: 1.25rem;
-      margin-bottom: 1rem;
-      color: #f8fafc;
-      font-weight: 600;
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #b7bcff;
+      margin-bottom: 0.75rem;
     }
 
+    /* Input & Button Styles */
     .input-group {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
+      gap: 0.6rem;
     }
 
     .input-group label {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #94a3b8;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
     }
 
-    .input-wrapper {
-      display: flex;
-      gap: 1rem;
-    }
-
+    textarea,
     input[type="text"] {
-      flex: 1;
-      background-color: #0f172a;
-      border: 1px solid #475569;
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      color: #f8fafc;
+      width: 100%;
+      background: rgba(6, 12, 20, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 12px;
+      color: var(--text);
+      padding: 0.9rem 1rem;
       font-size: 1rem;
-      transition: all 0.2s;
+      resize: vertical;
+      min-height: 86px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
+    textarea:focus,
     input[type="text"]:focus {
       outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      border-color: rgba(124, 92, 255, 0.75);
+      box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.12);
     }
 
     button {
-      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      background: var(--accent);
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
+      border-radius: 12px;
+      padding: 0.8rem 1.15rem;
+      font-size: 0.96rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
+      gap: 0.55rem;
       white-space: nowrap;
     }
 
     button:hover {
-      background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+      background: var(--accent-strong);
+      box-shadow: 0 14px 28px rgba(124, 92, 255, 0.24);
+      transform: translateY(-1px);
     }
 
     button:disabled {
-      background: #475569;
-      color: #94a3b8;
+      opacity: 0.6;
       cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .secondary-btn {
+      background: rgba(12, 20, 31, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      color: var(--text);
       box-shadow: none;
     }
 
-    /* Loading Section */
-    .loading-container {
+    .secondary-btn:hover {
+      background: rgba(18, 30, 45, 0.96);
+    }
+
+    .tiny-sparkle {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* Create Production Card */
+    .create-production-card {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .create-production-card h2 {
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.7rem;
+    }
+
+    .create-production-card p {
+      max-width: 560px;
+      color: var(--subtitle);
+      font-size: 0.98rem;
+      margin: 0 auto 1.5rem;
+    }
+
+    .create-production-card .input-group {
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+    }
+
+    /* Main Workspace */
+    .main-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(290px, 0.85fr);
+      gap: 1.5rem;
+      align-items: stretch;
+      margin-bottom: 2rem;
+    }
+
+    .ai-production-section,
+    .ai-crew-section {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* AI Production */
+    .ai-production-section h2 {
+      font-size: 1.55rem;
+      color: var(--text);
+      letter-spacing: -0.04em;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .production-status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-item {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      text-align: left;
+    }
+
+    .status-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .status-value {
+      font-size: 0.9rem;
+      color: var(--text);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .ai-crew-status-message {
+      font-size: 0.85rem;
+      color: var(--subtitle);
+      margin-bottom: 1rem;
+    }
+
+    .stage-progress {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+      padding: 0.8rem;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .stage-progress-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .stage-progress-item .icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(148, 163, 184, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .stage-progress-item.active .icon {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .stage-progress-item.completed .icon {
+      background: var(--green-soft);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    /* AI Crew */
+    .ai-crew-section h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .chat-thread {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      overflow-y: auto;
+      padding: 0.65rem;
+      background: rgba(8, 15, 27, 0.85);
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      margin-bottom: 0.7rem;
+      max-height: 300px; /* Adjust as needed */
+    }
+
+    .chat-message {
+      max-width: 92%;
+      border-radius: 12px;
+      padding: 0.6rem 0.7rem;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      border: 1px solid transparent;
+    }
+
+    .chat-message.user {
+      align-self: flex-end;
+      background: rgba(124, 92, 255, 0.14);
+      border-color: rgba(124, 92, 255, 0.25);
+      color: var(--text);
+    }
+
+    .chat-message.ai {
+      align-self: flex-start;
+      background: rgba(15, 25, 39, 0.9);
+      border-color: rgba(148, 163, 184, 0.15);
+      color: var(--subtitle);
+    }
+
+    .chat-composer {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.7rem;
+    }
+
+    .chat-composer input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .suggestion-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.8rem;
+    }
+
+    .suggestion-row button {
+      background: rgba(124, 92, 255, 0.08);
+      border: 1px solid rgba(124, 92, 255, 0.26);
+      color: #dfe5ff;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.72rem;
+      border-radius: 999px;
+      white-space: normal;
+      height: auto;
+      line-height: 1.3;
+    }
+
+    /* Loading State */
+    #loading {
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 3rem 1rem;
+      padding: 2rem;
       text-align: center;
     }
 
+    .loading-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.75rem;
+    }
+
     .spinner {
-      border: 4px solid #334155;
-      width: 50px;
-      height: 50px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      border-left-color: #6366f1;
-      animation: spin 1s linear infinite;
-      margin-bottom: 1.5rem;
+      border: 3px solid rgba(148, 163, 184, 0.35);
+      border-top-color: var(--accent);
+      animation: spin 0.8s linear infinite;
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      to { transform: rotate(360deg); }
     }
 
-    .progress-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      width: 100%;
-      max-width: 450px;
-      margin-top: 1.5rem;
-      text-align: left;
-      background-color: #0f172a;
-      padding: 1.5rem;
-      border-radius: 8px;
-      border: 1px solid #334155;
+    .loading-container h3 {
+      font-size: 1.5rem;
+      color: var(--text);
+      letter-spacing: -0.03em;
     }
 
-    .step-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.9rem;
-      color: #64748b;
+    .loading-container p {
+      color: var(--subtitle);
+      font-size: 1rem;
+      max-width: 620px;
+      margin-bottom: 0.9rem;
     }
 
-    .step-item.active {
-      color: #6366f1;
-      font-weight: 600;
-    }
-
-    .step-item.completed {
-      color: #10b981;
-    }
-
-    .step-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: #334155;
-    }
-
-    .step-item.active .step-dot {
-      background-color: #6366f1;
-      box-shadow: 0 0 8px #6366f1;
-      animation: pulse 1.5s infinite;
-    }
-
-    .step-item.completed .step-dot {
-      background-color: #10b981;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.3); opacity: 0.7; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    /* Error Section */
-    .error-container {
+    /* Error Box */
+    #error-box {
       display: none;
-      background-color: rgba(239, 68, 68, 0.1);
-      border: 1px solid #ef4444;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
+      background: #2a0b0f;
+      border: 1px solid #7f1d1d;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      color: #fca5a5;
     }
 
     .error-title {
-      color: #fca5a5;
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
     }
 
     .error-details {
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      padding: 0.7rem;
       font-family: monospace;
-      font-size: 0.9rem;
-      background-color: rgba(0, 0, 0, 0.2);
-      padding: 0.75rem;
-      border-radius: 4px;
-      overflow-x: auto;
-      margin-top: 0.5rem;
+      font-size: 0.8rem;
       white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 0.7rem;
     }
 
-    /* Results Section with Tabs */
+    /* Results Area */
     .results-container {
       display: none;
-      flex-direction: column;
-      gap: 1.5rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-top: 2rem;
     }
 
-    /* Pipeline Summary Mini Card */
     .pipeline-summary {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(to right, #1e293b, #0f172a);
-      border-radius: 8px;
-      border: 1px solid #334155;
-      padding: 1rem 1.5rem;
+      gap: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.2rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
     }
 
-    .summary-left {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .summary-topic {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #f8fafc;
+    .summary-left h2 {
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
+      letter-spacing: -0.04em;
+      font-weight: 700;
+      color: var(--text);
+      max-width: 700px;
+      word-break: break-word;
     }
 
     .summary-sub {
-      font-size: 0.8rem;
-      color: #94a3b8;
-    }
-
-    .summary-right {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
     }
 
     .overall-score-badge {
+      background: rgba(124, 92, 255, 0.09);
+      border: 1px solid rgba(124, 92, 255, 0.25);
+      border-radius: 14px;
+      padding: 0.6rem 0.8rem;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      background-color: #0f172a;
-      border: 1px solid #334155;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+      gap: 0.6rem;
+      color: var(--text);
     }
 
     .overall-score-badge span:first-child {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 800;
-      color: #8b5cf6;
+      letter-spacing: -0.05em;
     }
 
     .overall-score-badge span:last-child {
-      font-size: 0.65rem;
-      color: #64748b;
+      font-size: 0.72rem;
+      color: var(--muted);
       text-transform: uppercase;
+      letter-spacing: 0.09em;
     }
 
     .badge-status {
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1rem;
-      text-align: center;
-      min-width: 100px;
-    }
-
-    .badge-status.PASS {
-      background-color: rgba(16, 185, 129, 0.15);
-      border: 1px solid #10b981;
-      color: #34d399;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 0.55rem 0.8rem;
+      border: 1px solid rgba(60, 210, 154, 0.28);
+      background: rgba(60, 210, 154, 0.1);
+      color: #d8fceb;
     }
 
     .badge-status.WARNING {
-      background-color: rgba(245, 158, 11, 0.15);
-      border: 1px solid #f59e0b;
-      color: #fbbf24;
+      border-color: rgba(243, 198, 108, 0.35);
+      background: rgba(243, 198, 108, 0.1);
+      color: #fce9b8;
     }
 
     .badge-status.FAIL {
-      background-color: rgba(239, 68, 68, 0.15);
-      border: 1px solid #ef4444;
-      color: #fca5a5;
+      border-color: rgba(255, 107, 116, 0.35);
+      background: rgba(255, 107, 116, 0.1);
+      color: #ffd7d9;
     }
 
-    /* Tab navigation */
+    .output-label {
+      margin: 0.6rem 0 0.8rem;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #b7bcff;
+      font-weight: 800;
+    }
+
     .tabs-header {
       display: flex;
-      overflow-x: auto;
-      border-bottom: 2px solid #334155;
-      gap: 0.5rem;
-      padding-bottom: 2px;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.8rem;
     }
 
     .tab-btn {
-      background: none;
-      border: none;
-      color: #94a3b8;
-      padding: 0.75rem 1.25rem;
-      font-size: 0.95rem;
-      font-weight: 600;
+      background: rgba(14, 23, 35, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      color: var(--subtitle);
+      padding: 0.7rem 1.1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
       cursor: pointer;
-      border-bottom: 3px solid transparent;
-      border-radius: 6px 6px 0 0;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
 
     .tab-btn:hover {
-      background-color: #1e293b;
-      color: #f8fafc;
+      border-color: rgba(148, 163, 184, 0.4);
+      color: var(--text);
     }
 
     .tab-btn.active {
-      color: #6366f1;
-      border-bottom-color: #6366f1;
-      background-color: #1e293b;
+      background: rgba(124, 92, 255, 0.12);
+      border-color: rgba(124, 92, 255, 0.42);
+      color: var(--text);
     }
 
-    /* Tab Content panels */
     .tab-panel {
       display: none;
-      background-color: #1e293b;
-      border-radius: 0 0 12px 12px;
-      border: 1px solid #334155;
-      border-top: none;
-      padding: 2rem;
+      background: rgba(8, 16, 27, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.2rem;
+      margin-top: 1rem;
     }
 
     .tab-panel.active {
       display: block;
     }
 
-    /* Section-specific markup formatting */
+    .content-box {
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      background: rgba(12, 20, 31, 0.8);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .content-box h3 {
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+
+    .brief-summary,
+    .list-styled {
+      color: var(--subtitle);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .list-styled {
+      list-style: disc;
+      padding-left: 1.1rem;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .script-export-toolbar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .script-export-toolbar .secondary-btn {
+      flex: 0 1 auto;
+      width: auto;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .screenplay-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(2, 6, 23, 0.85);
+      padding: 1rem;
+      z-index: 1000;
+    }
+
+    .screenplay-modal.open {
+      display: flex;
+    }
+
+    .screenplay-modal-content {
+      width: min(900px, 100%);
+      max-height: 85vh;
+      overflow: hidden; /* Changed from auto to hidden for inner scroll */
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(11, 18, 27, 0.98);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screenplay-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1rem 0.7rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .screenplay-modal-header h3 {
+      color: var(--text);
+      font-size: 1.1rem;
+    }
+
+    .close-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(15, 25, 39, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      font-size: 1.4rem;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .screenplay-preview {
+      flex: 1;
+      overflow-y: auto; /* Added for scrollable content */
+      padding: 1rem;
+      color: #000; /* Overridden by screenplay-page styles */
+    }
+
+    /* Professional Screenplay Formatting */
+    .screenplay-page {
+      background: white;
+      color: #000;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12pt;
+      line-height: 1.5;
+      max-width: 6.5in; /* Standard screenplay width */
+      margin: 0 auto;
+      padding: 1in; /* Standard screenplay margins */
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 100%; /* Ensure modal content fills */
+    }
+
+    .screenplay-page .title-page {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 85vh;
+      margin-bottom: 2in; /* Roughly a page break */
+      page-break-after: always;
+    }
+
+    .screenplay-page .title-page h1 {
+      font-size: 18pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 0 0 0.5em 0;
+      letter-spacing: 0.1em;
+    }
+
+    .screenplay-page .title-page .byline {
+      font-style: italic;
+      font-size: 12pt;
+      margin: 2em 0 0 0;
+    }
+
+    .screenplay-page .scene-heading {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 12pt;
+      letter-spacing: 0.05em;
+      left: 1in;
+      position: relative;
+    }
+
+    .screenplay-page .action {
+      margin-bottom: 1em;
+      font-size: 12pt;
+      text-align: left;
+      margin-left: 1in;
+      margin-right: 1in;
+    }
+
+    .screenplay-page .character {
+      margin-top: 1em;
+      margin-bottom: 0.25em;
+      margin-left: 2.75in; /* Centered */
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 12pt;
+    }
+
+    .screenplay-page .dialogue {
+      margin-left: 1.5in;
+      margin-right: 1.5in;
+      margin-bottom: 0.5em;
+      font-size: 12pt;
+    }
+
+    .screenplay-page .parenthetical {
+      margin-left: 2.25in; /* Centered under character */
+      margin-right: 2in;
+      margin-bottom: 0.25em;
+      font-style: italic;
+      font-size: 12pt;
+    }
+
+    .screenplay-page .transition {
+      margin-top: 1em;
+      margin-bottom: 1em;
+      text-align: right;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 12pt;
+      margin-right: 1in;
+    }
+
+    /* Production Plan & Quality Audit */
     .meta-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-      background-color: #0f172a;
-      padding: 1.25rem;
-      border-radius: 8px;
-      border: 1px solid #334155;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      background: rgba(12, 20, 31, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      border-radius: 12px;
     }
 
     .meta-item {
       display: flex;
       flex-direction: column;
+      gap: 0.2rem;
+      min-width: 0;
     }
 
     .meta-label {
-      font-size: 0.75rem;
-      color: #64748b;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      color: var(--muted);
       font-weight: 700;
-      margin-bottom: 0.25rem;
     }
 
     .meta-value {
-      font-size: 0.95rem;
-      color: #f1f5f9;
-      font-weight: 500;
-    }
-
-    .content-box {
-      margin-bottom: 2rem;
-    }
-
-    .content-box h3 {
-      font-size: 1.1rem;
-      color: #cbd5e1;
-      margin-bottom: 0.75rem;
-      border-left: 3px solid #6366f1;
-      padding-left: 0.5rem;
-    }
-
-    .brief-summary {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: #e2e8f0;
-      background-color: #0f172a;
-      padding: 1.25rem;
-      border-radius: 8px;
-      margin-bottom: 1.5rem;
-    }
-
-    .list-styled {
-      list-style-type: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .list-styled li {
-      position: relative;
-      padding-left: 1.5rem;
-    }
-
-    .list-styled li::before {
-      content: "✦";
-      position: absolute;
-      left: 0;
-      color: #8b5cf6;
-    }
-
-    /* Script Section Styles */
-    .script-section-card {
-      background-color: #0f172a;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-    }
-
-    .script-section-header {
-      font-weight: bold;
-      color: #8b5cf6;
-      border-bottom: 1px solid #334155;
-      padding-bottom: 0.5rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .script-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
-    @media (min-width: 768px) {
-      .script-grid {
-        grid-template-columns: 2fr 1fr;
-      }
-    }
-
-    .script-dialogue {
-      background-color: rgba(99, 102, 241, 0.05);
-      border-left: 2px solid #6366f1;
-      padding: 0.75rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    .script-cue-title {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: #64748b;
-      margin-bottom: 0.25rem;
-    }
-
-    .script-visuals {
-      background-color: rgba(139, 92, 246, 0.05);
-      border-left: 2px solid #8b5cf6;
-      padding: 0.75rem;
-      border-radius: 0 6px 6px 0;
-    }
-
-    /* Storyboard Grid Styles */
-    .storyboard-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (min-width: 768px) {
-      .storyboard-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .storyboard-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .storyboard-card {
-      background-color: #0f172a;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      transition: border-color 0.2s;
-    }
-
-    .storyboard-card:hover {
-      border-color: #6366f1;
-    }
-
-    .shot-badge {
-      align-self: flex-start;
-      background-color: #6366f1;
-      color: white;
-      font-size: 0.75rem;
-      font-weight: 800;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-    }
-
-    .storyboard-desc {
+      color: var(--text);
       font-size: 0.9rem;
-      color: #f1f5f9;
-      flex: 1;
-    }
-
-    .storyboard-audio {
-      font-size: 0.85rem;
-      font-style: italic;
-      color: #94a3b8;
-      border-top: 1px solid #1e293b;
-      padding-top: 0.5rem;
-    }
-
-    .storyboard-footer {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: #64748b;
-      font-weight: bold;
-    }
-
-    /* Production Plan Styles */
-    .prod-table-container {
-      overflow-x: auto;
-      margin-bottom: 2rem;
+      font-weight: 600;
+      word-break: break-word;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 0.7rem 0.55rem;
       text-align: left;
+      vertical-align: top;
+      font-size: 0.8rem;
+      color: var(--subtitle);
     }
 
     th {
-      background-color: #0f172a;
-      color: #94a3b8;
-      font-size: 0.75rem;
+      color: #dfe5ff;
+      font-size: 0.69rem;
       text-transform: uppercase;
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid #334155;
-    }
-
-    td {
-      padding: 1rem;
-      border-bottom: 1px solid #334155;
-      font-size: 0.9rem;
-    }
-
-    tr:hover td {
-      background-color: rgba(255, 255, 255, 0.02);
+      letter-spacing: 0.08em;
+      font-weight: 800;
+      background: rgba(124, 92, 255, 0.15);
     }
 
     .task-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+      display: grid;
+      gap: 0.6rem;
     }
 
     .task-item {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      background-color: #0f172a;
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
-      border: 1px solid #334155;
+      gap: 0.6rem;
+      padding: 0.6rem 0.7rem;
+      background: rgba(9, 16, 26, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      border-radius: 10px;
     }
 
-    .task-checkbox {
-      width: 16px;
-      height: 16px;
-      accent-color: #6366f1;
+    .task-item input {
+      accent-color: var(--accent);
     }
 
     .task-tag {
-      font-size: 0.65rem;
-      font-weight: bold;
-      padding: 0.15rem 0.4rem;
-      border-radius: 3px;
-      background-color: #334155;
-      color: #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: rgba(124, 92, 255, 0.12);
+      color: #dfe5ff;
+      border: 1px solid rgba(124, 92, 255, 0.28);
+      padding: 0.24rem 0.5rem;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    /* Quality Audit Styles */
     .quality-audit-container {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-
-    @media (min-width: 768px) {
-      .quality-audit-container {
-        grid-template-columns: 1fr 2fr;
-      }
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 1.5rem;
     }
 
     .quality-sidebar {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 0.8rem;
+      align-items: center;
+      justify-content: flex-start;
     }
 
     .score-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, rgba(124, 92, 255, 0.2), rgba(124, 92, 255, 0.04));
+      border: 3px solid rgba(124, 92, 255, 0.4);
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      background-color: #0f172a;
-      border: 2px dashed #475569;
-      border-radius: 12px;
-      padding: 2.5rem;
-      text-align: center;
+      flex-direction: column;
+      box-shadow: inset 0 0 20px rgba(124, 92, 255, 0.12);
     }
 
     .score-value {
-      font-size: 3.5rem;
+      font-size: 2.3rem;
       font-weight: 800;
-      color: #8b5cf6;
       line-height: 1;
+      letter-spacing: -0.06em;
+      color: var(--text);
     }
 
     .score-label {
-      font-size: 0.8rem;
-      color: #64748b;
+      margin-top: 0.3rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
-      font-weight: bold;
-      margin-top: 0.5rem;
-    }
-
-    .audit-checks-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
     }
 
     .audit-check-card {
-      background-color: #0f172a;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      padding: 1.25rem;
+      padding: 0.8rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      background: rgba(12, 20, 31, 0.8);
+      border-radius: 12px;
     }
 
     .audit-check-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0.5rem;
       margin-bottom: 0.5rem;
     }
 
     .audit-check-name {
-      font-weight: bold;
-      font-size: 1rem;
-      color: #f1f5f9;
+      color: #dfe5ff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .audit-check-tag {
-      font-size: 0.7rem;
-      font-weight: bold;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 0.28rem 0.56rem;
     }
 
     .audit-check-tag.pass {
-      background-color: rgba(16, 185, 129, 0.15);
-      border: 1px solid #10b981;
-      color: #34d399;
+      background: rgba(60, 210, 154, 0.12);
+      color: #d4ffe8;
+      border: 1px solid rgba(60, 210, 154, 0.3);
     }
 
     .audit-check-tag.fail {
-      background-color: rgba(239, 68, 68, 0.15);
-      border: 1px solid #ef4444;
-      color: #fca5a5;
+      background: rgba(255, 107, 116, 0.1);
+      color: #ffd3d7;
+      border: 1px solid rgba(255, 107, 116, 0.3);
     }
 
     .audit-check-feedback {
-      font-size: 0.85rem;
-      color: #94a3b8;
+      color: var(--subtitle);
+      font-size: 0.82rem;
+      line-height: 1.5;
     }
 
-    /* Raw JSON Output View */
-    .json-pre {
-      background-color: #0f172a;
-      color: #a7f3d0;
-      font-family: monospace;
-      font-size: 0.85rem;
-      padding: 1.5rem;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      max-height: 600px;
-    }
-
-    /* Footer Styles */
+    /* Footer */
     footer {
-      margin-top: 4rem;
+      margin-top: 2rem;
       text-align: center;
-      color: #64748b;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
       font-size: 0.8rem;
-      border-top: 1px solid #1e293b;
-      padding-top: 1.5rem;
+    }
+
+    /* Media Queries */
+    @media (max-width: 900px) {
+      .main-workspace,
+      .quality-audit-container {
+        grid-template-columns: 1fr;
+      }
+      .pipeline-summary {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+      }
+
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 1.5rem;
+      }
+
+      .status-badge {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      .logo-container {
+        width: 100%;
+      }
+
+      .create-production-card h2 {
+        max-width: none;
+      }
+
+      .input-group label {
+        font-size: 0.75rem;
+      }
+
+      .chat-composer,
+      .script-export-toolbar {
+        flex-direction: column;
+      }
+
+      .tabs-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      button,
+      .secondary-btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -811,209 +1145,272 @@
         <div class="logo-icon">CP</div>
         <div class="logo-text">
           <h1>CreatorPilot</h1>
-          <p>Autonomous AI Agent Pipeline</p>
+          <p>AI-powered filmmaking workspace</p>
         </div>
       </div>
       <div class="status-badge">
         <span id="api-status-dot" class="status-dot"></span>
-        <span id="api-status-text">Checking server...</span>
+        <div class="status-badge-stack">
+          <strong id="api-status-text">System Online</strong>
+          <span>AI Crew Status</span>
+        </div>
       </div>
     </header>
 
-    <!-- Main Grid -->
-    <div class="dashboard-grid">
-      <!-- Input Section -->
-      <div class="card">
-        <h2>Initiate Autonomous Agent Pipeline</h2>
-        <div class="input-group">
-          <label for="topic-input">Enter Topic or Video Concept</label>
-          <div class="input-wrapper">
-            <input type="text" id="topic-input" placeholder="e.g., Guide to choosing the right lighting for a home YouTube studio" />
-            <button id="run-btn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-              Run Pipeline
-            </button>
+    <!-- Create Production Card -->
+    <div class="card create-production-card">
+      <h2 id="create-production-title">Create a new production</h2>
+      <p id="create-production-description">Kickstart your video project. Describe your vision, and our AI Crew will handle the rest.</p>
+      <div class="input-group">
+        <label for="topic-input" class="sr-only">What is your video about?</label>
+        <textarea id="topic-input" placeholder="What is your video about?" rows="3"></textarea>
+      </div>
+      <button id="run-btn" type="button">
+        <svg class="tiny-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/><path d="M18 14l.7 2.3L21 17l-2.3.7L18 20l-.7-2.3L15 17l2.3-.7L18 14z"/></svg>
+        Create with AI Crew
+      </button>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="main-workspace">
+      <!-- AI Production Section -->
+      <div class="card ai-production-section">
+        <div class="eyebrow">Your AI Production</div>
+        <h2 id="production-title-display">New Production Idea</h2>
+        <p id="production-status-message" class="ai-crew-status-message">Ready to create your next video masterpiece!</p>
+
+        <div class="production-status-grid">
+          <div class="status-item">
+            <span class="status-label">Current Status</span>
+            <span class="status-value" id="current-production-status">Idle</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Overall Quality</span>
+            <span class="status-value" id="overall-quality-score">--</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Team Lead</span>
+            <span class="status-value">AI Production Director</span>
+          </div>
+        </div>
+
+        <div class="stage-progress">
+          <div class="stage-progress-item" id="stage-research">
+            <div class="icon">1</div>
+            <span>Research</span>
+          </div>
+          <div class="stage-progress-item" id="stage-script">
+            <div class="icon">2</div>
+            <span>Script</span>
+          </div>
+          <div class="stage-progress-item" id="stage-storyboard">
+            <div class="icon">3</div>
+            <span>Storyboard</span>
+          </div>
+          <div class="stage-progress-item" id="stage-production">
+            <div class="icon">4</div>
+            <span>Production Plan</span>
+          </div>
+          <div class="stage-progress-item" id="stage-quality">
+            <div class="icon">5</div>
+            <span>Quality Review</span>
           </div>
         </div>
       </div>
 
-      <!-- Loading Section -->
-      <div id="loading" class="loading-container card">
+      <!-- AI Crew Section -->
+      <div class="card ai-crew-section">
+        <div class="eyebrow">AI Crew</div>
+        <h3 id="crew-status">AI Crew is ready</h3>
+        <p id="crew-message">Use the chat box to refine your production. Ask AI Crew to strengthen the hook, change a scene, shorten the video, improve the lighting, or make another change.</p>
+        <div id="chat-thread" class="chat-thread" aria-live="polite"></div>
+        <div class="chat-composer">
+          <input id="crew-chat-input" type="text" placeholder="Ask AI Crew to refine your production..." />
+          <button id="crew-send-btn" class="secondary-btn" type="button">Send</button>
+        </div>
+        <div class="suggestion-row">
+          <button type="button" class="mini-suggestion">Make the hook stronger</button>
+          <button type="button" class="mini-suggestion">Make the video shorter</button>
+          <button type="button" class="mini-suggestion">Change Scene 3</button>
+          <button type="button" class="mini-suggestion">Improve the lighting</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="card loading-container">
+      <div class="loading-row">
         <div class="spinner"></div>
-        <h3 id="loading-message" style="margin-bottom: 0.5rem; color: #f8fafc;">Executing Autonomous Pipeline...</h3>
-        <p style="color: #94a3b8; font-size: 0.9rem; max-width: 480px;">
-          The multi-agent orchestrator is processing your request synchronously. Stage components will run sequentially: Research &rarr; Script &rarr; Storyboard &rarr; Production &rarr; Quality. This may take up to 45 seconds.
-        </p>
+        <h3 id="loading-message">AI Crew is working on your production...</h3>
+      </div>
+      <p id="loading-sub-message">Researching your topic...</p>
+    </div>
 
-        <!-- Simulated Visual Pipeline Steps -->
-        <div class="progress-steps">
-          <div class="step-item" id="step-1">
-            <div class="step-dot"></div>
-            <span>Stage 1: Parallel Web Research Agent (Sourcing intelligence...)</span>
+    <!-- Error Box -->
+    <div id="error-box" class="error-container">
+      <div class="error-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        AI Crew Error - <span id="error-stage-label">Production</span> Stage Failed
+      </div>
+      <p id="error-text">An unexpected error occurred. Please check the console for details.</p>
+      <div id="error-trace" class="error-details"></div>
+    </div>
+
+    <!-- Results Container -->
+    <div id="results" class="results-container">
+      <!-- Summary Header Row -->
+      <div class="pipeline-summary">
+        <div class="summary-left">
+          <h2 id="display-topic">Video Topic Title</h2>
+          <p id="display-metadata" class="summary-sub">Production completed successfully.</p>
+        </div>
+        <div class="overall-score-badge">
+          <span id="display-score">--</span>
+          <span>Overall Score</span>
+        </div>
+        <div id="display-status" class="badge-status">PASS</div>
+      </div>
+
+      <div class="output-label">PRODUCTION OUTPUTS</div>
+
+      <!-- Tabs Navigation -->
+      <div class="tabs-header">
+        <button class="tab-btn active" onclick="switchTab(event, 'tab-script')">Script</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-storyboard')">Storyboard</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-production')">Production Plan</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-quality')">Quality Review</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-research')">Research</button>
+      </div>
+
+      <!-- Panel: Script -->
+      <div id="tab-script" class="tab-panel active">
+        <div class="content-box">
+          <h3 id="script-title-display">Video Screenplay</h3>
+          <div class="script-export-toolbar">
+            <button type="button" id="view-screenplay-btn" class="secondary-btn">View Full Screenplay</button>
+            <button type="button" id="download-word-btn" class="secondary-btn">Download Word</button>
+            <button type="button" id="download-pdf-btn" class="secondary-btn">Download PDF</button>
           </div>
-          <div class="step-item" id="step-2">
-            <div class="step-dot"></div>
-            <span>Stage 2: Scriptwriter Agent (Drafting video screenplay...)</span>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Format</span>
+            <span class="meta-value" id="script-format">Educational Video</span>
           </div>
-          <div class="step-item" id="step-3">
-            <div class="step-dot"></div>
-            <span>Stage 3: Storyboard Illustrator Agent (Decomposing screenplay shots...)</span>
+          <div class="meta-item">
+            <span class="meta-label">Audience</span>
+            <span class="meta-value" id="script-audience">Solo Creators</span>
           </div>
-          <div class="step-item" id="step-4">
-            <div class="step-dot"></div>
-            <span>Stage 4: Logistical Producer Agent (Formulating shot layouts & checklist...)</span>
+          <div class="meta-item">
+            <span class="meta-label">Tone</span>
+            <span class="meta-value" id="script-tone">Informative</span>
           </div>
-          <div class="step-item" id="step-5">
-            <div class="step-dot"></div>
-            <span>Stage 5: Quality Gate & Auditor Agent (Running conformance checks...)</span>
+          <div class="meta-item">
+            <span class="meta-label">Target Duration</span>
+            <span class="meta-value" id="script-duration">5 minutes</span>
           </div>
+        </div>
+
+        <div class="content-box">
+          <h3>Opening Hook</h3>
+          <div class="brief-summary" id="script-hook" style="font-style: italic; border-left: 3px solid var(--accent);"></div>
+        </div>
+
+        <div class="content-box">
+          <h3>Screenplay Sections</h3>
+          <div id="script-sections-list"></div>
         </div>
       </div>
 
-      <!-- Error Box -->
-      <div id="error-box" class="error-container">
-        <div class="error-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-          Pipeline Error - <span id="error-stage-label">Orchestration</span> Stage Failed
+      <!-- Panel: Storyboard -->
+      <div id="tab-storyboard" class="tab-panel">
+        <div class="content-box">
+          <h3 id="storyboard-title" style="margin-bottom: 1rem;">Video Visual Storyboard</h3>
+          <div class="storyboard-grid" id="storyboard-grid-list"></div>
         </div>
-        <p id="error-text" style="color: #fca5a5; font-size: 0.95rem;"></p>
-        <div id="error-trace" class="error-details"></div>
       </div>
 
-      <!-- Results Container -->
-      <div id="results" class="results-container">
-        <!-- Summary Header Row -->
-        <div class="pipeline-summary">
-          <div class="summary-left">
-            <div class="summary-topic" id="display-topic">Video Topic Title</div>
-            <div class="summary-sub" id="display-metadata">Completed synchronously</div>
-          </div>
-          <div class="summary-right">
-            <div class="overall-score-badge">
-              <span id="display-score">--</span>
-              <span>Overall Score</span>
+      <!-- Panel: Production Plan -->
+      <div id="tab-production" class="tab-panel">
+        <div class="content-box">
+          <h3>Creator Logistical Shot List</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 8%">Shot #</th>
+                <th style="width: 8%">Story #</th>
+                <th style="width: 15%">Shot Type</th>
+                <th style="width: 15%">Location</th>
+                <th style="width: 24%">Action Description</th>
+                <th style="width: 30%">Solo Setup Instructions</th>
+              </tr>
+            </thead>
+            <tbody id="production-shot-table-body"></tbody>
+          </table>
+        </div>
+
+        <div class="content-box">
+          <h3>Solo-Creator Filming Checklist Tasks</h3>
+          <div class="task-list" id="production-checklist-tasks"></div>
+        </div>
+      </div>
+
+      <!-- Panel: Quality Audit -->
+      <div id="tab-quality" class="tab-panel">
+        <div class="quality-audit-container">
+          <div class="quality-sidebar">
+            <div class="score-circle">
+              <span class="score-value" id="quality-score-value">0</span>
+              <span class="score-label">Overall Audit Score</span>
             </div>
-            <div id="display-status" class="badge-status">PASS</div>
+            <div id="quality-status-badge" class="badge-status" style="text-align: center; width: 100%;">PASS</div>
+          </div>
+          <div class="quality-main">
+            <div class="content-box">
+              <h3>Executive Auditor Summary</h3>
+              <div class="brief-summary" id="quality-summary-text"></div>
+            </div>
+            <div class="content-box">
+              <h3>Structured Compliance Checks</h3>
+              <div class="audit-checks-list" id="quality-checks-list"></div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Tabs Navigation -->
-        <div class="tabs-header">
-          <button class="tab-btn active" onclick="switchTab(event, 'tab-research')">📋 Research Brief</button>
-          <button class="tab-btn" onclick="switchTab(event, 'tab-script')">✍️ Script</button>
-          <button class="tab-btn" onclick="switchTab(event, 'tab-storyboard')">🎨 Storyboard</button>
-          <button class="tab-btn" onclick="switchTab(event, 'tab-production')">⚙️ Production Plan</button>
-          <button class="tab-btn" onclick="switchTab(event, 'tab-quality')">🛡️ Quality Audit</button>
-        </div>
-
-        <!-- Panel: Research Brief -->
-        <div id="tab-research" class="tab-panel active">
+      <!-- Panel: Research Brief -->
+      <div id="tab-research" class="tab-panel">
+        <div class="content-box">
+          <h3>Research Brief Summary</h3>
           <div class="brief-summary" id="research-summary"></div>
-          <div class="content-box">
-            <h3>Verified Search Intelligence Findings</h3>
-            <ul class="list-styled" id="research-findings"></ul>
-          </div>
-          <div class="content-box">
-            <h3>Inferred Recommendations</h3>
-            <ul class="list-styled" id="research-recommendations"></ul>
-          </div>
         </div>
-
-        <!-- Panel: Script -->
-        <div id="tab-script" class="tab-panel">
-          <div class="meta-grid">
-            <div class="meta-item">
-              <span class="meta-label">Format</span>
-              <span class="meta-value" id="script-format">Educational Video</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Audience</span>
-              <span class="meta-value" id="script-audience">Solo Creators</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Tone</span>
-              <span class="meta-value" id="script-tone">Informative</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Target Duration</span>
-              <span class="meta-value" id="script-duration">5 minutes</span>
-            </div>
-          </div>
-          
-          <div class="content-box">
-            <h3>Engaging Intro Hook</h3>
-            <div class="brief-summary" id="script-hook" style="font-style: italic; border-left: 3px solid #6366f1;"></div>
-          </div>
-
-          <div class="content-box">
-            <h3>Main Video Screenplay Sections</h3>
-            <div id="script-sections-list"></div>
-          </div>
+        <div class="content-box">
+          <h3>Verified Search Intelligence Findings</h3>
+          <ul class="list-styled" id="research-findings"></ul>
         </div>
-
-        <!-- Panel: Storyboard -->
-        <div id="tab-storyboard" class="tab-panel">
-          <div class="content-box">
-            <h3 id="storyboard-title" style="margin-bottom: 1rem;">Video Visual Storyboard</h3>
-            <div class="storyboard-grid" id="storyboard-grid-list"></div>
-          </div>
+        <div class="content-box">
+          <h3>Inferred Recommendations</h3>
+          <ul class="list-styled" id="research-recommendations"></ul>
         </div>
+      </div>
 
-        <!-- Panel: Production Plan -->
-        <div id="tab-production" class="tab-panel">
-          <div class="content-box">
-            <h3>Creator Logistical Shot List</h3>
-            <div class="prod-table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th style="width: 8%">Shot #</th>
-                    <th style="width: 8%">Story #</th>
-                    <th style="width: 15%">Shot Type</th>
-                    <th style="width: 15%">Location</th>
-                    <th style="width: 24%">Action Description</th>
-                    <th style="width: 30%">Solo Setup Instructions</th>
-                  </tr>
-                </thead>
-                <tbody id="production-shot-table-body"></tbody>
-              </table>
-            </div>
-          </div>
+    </div>
 
-          <div class="content-box">
-            <h3>Solo-Creator Filming Checklist Tasks</h3>
-            <div class="task-list" id="production-checklist-tasks"></div>
-          </div>
+    <!-- Screenplay Modal -->
+    <div id="screenplay-modal" class="screenplay-modal" aria-hidden="true">
+      <div class="screenplay-modal-content">
+        <div class="screenplay-modal-header">
+          <h3>Screenplay Preview</h3>
+          <button type="button" id="close-screenplay-modal" class="close-btn" aria-label="Close screenplay preview">Ãƒâ€”</button>
         </div>
-
-        <!-- Panel: Quality Audit -->
-        <div id="tab-quality" class="tab-panel">
-          <div class="quality-audit-container">
-            <div class="quality-sidebar">
-              <div class="score-circle">
-                <span class="score-value" id="quality-score-value">0</span>
-                <span class="score-label">Overall Audit Score</span>
-              </div>
-              <div id="quality-status-badge" class="badge-status" style="text-align: center; width: 100%;">PASS</div>
-            </div>
-            <div class="quality-main">
-              <div class="content-box">
-                <h3>Executive Auditor Summary</h3>
-                <div class="brief-summary" id="quality-summary-text"></div>
-              </div>
-              <div class="content-box">
-                <h3>Structured Compliance Checks</h3>
-                <div class="audit-checks-list" id="quality-checks-list"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div id="screenplay-preview" class="screenplay-preview"></div>
       </div>
     </div>
 
     <!-- Footer -->
     <footer>
-      <p>CreatorPilot Node Server &copy; 2026. All agent processes conform to baseline Stage 1-8 criteria.</p>
+      <p>CreatorPilot &copy; 2026. AI-powered filmmaking workspace.</p>
     </footer>
   </div>
 
@@ -1023,119 +1420,590 @@
     const apiStatusText = document.getElementById('api-status-text');
     const runBtn = document.getElementById('run-btn');
     const topicInput = document.getElementById('topic-input');
+    const createProductionCard = document.querySelector('.create-production-card');
+    const mainWorkspace = document.querySelector('.main-workspace');
     const loadingContainer = document.getElementById('loading');
+    const loadingMessage = document.getElementById('loading-message');
+    const loadingSubMessage = document.getElementById('loading-sub-message');
     const errorBox = document.getElementById('error-box');
     const errorStageLabel = document.getElementById('error-stage-label');
     const errorText = document.getElementById('error-text');
     const errorTrace = document.getElementById('error-trace');
     const resultsContainer = document.getElementById('results');
 
+    const productionTitleDisplay = document.getElementById('production-title-display');
+    const productionStatusMessage = document.getElementById('production-status-message');
+    const currentProductionStatus = document.getElementById('current-production-status');
+    const overallQualityScore = document.getElementById('overall-quality-score');
+
+    const stageResearch = document.getElementById('stage-research');
+    const stageScript = document.getElementById('stage-script');
+    const stageStoryboard = document.getElementById('stage-storyboard');
+    const stageProduction = document.getElementById('stage-production');
+    const stageQuality = document.getElementById('stage-quality');
+    const allStages = [stageResearch, stageScript, stageStoryboard, stageProduction, stageQuality];
+
+    const crewStatus = document.getElementById('crew-status');
+    const crewMessage = document.getElementById('crew-message');
+    const crewChatInput = document.getElementById('crew-chat-input');
+    const crewSendBtn = document.getElementById('crew-send-btn');
+    const chatAgentStatusText =
+      document.getElementById('crew-status');
+
+    const chatProductionStatus =
+      document.getElementById('crew-message');
+
+    const chatThread = document.getElementById('chat-thread');
+    const screenplayModal = document.getElementById('screenplay-modal');
+    const screenplayPreview = document.getElementById('screenplay-preview');
+    const closeScreenplayModalBtn = document.getElementById('close-screenplay-modal');
+    const viewScreenplayBtn = document.getElementById('view-screenplay-btn');
+    const downloadWordBtn = document.getElementById('download-word-btn');
+    const downloadPdfBtn = document.getElementById('download-pdf-btn');
+
+    let currentResult = null;
+
     // Secure HTML Escaper Helper
     function escapeHtml(unsafe) {
       if (unsafe === undefined || unsafe === null) return '';
-      return String(unsafe)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      const div = document.createElement('div');
+      div.textContent = unsafe;
+      return div.innerHTML;
     }
+
+    function setCrewIdleState() {
+      productionTitleDisplay.textContent = 'New Production Idea';
+      productionStatusMessage.textContent = 'Ready to create your next video masterpiece!';
+      currentProductionStatus.textContent = 'Idle';
+      overallQualityScore.textContent = '--';
+      allStages.forEach(stage => stage.classList.remove('active', 'completed'));
+
+      crewStatus.textContent = 'AI Crew is ready';
+      crewMessage.textContent = 'Use the chat box to refine your production. Ask AI Crew to strengthen the hook, change a scene, shorten the video, improve the lighting, or make another change.';
+      if (chatThread) {
+        chatThread.innerHTML = '<div class="chat-message ai">The AI Crew is standing by. Share a concept, a rough hook, or a revision request and I will update the production.</div>';
+      }
+      mainWorkspace.style.display = 'none';
+      resultsContainer.style.display = 'none';
+      createProductionCard.style.display = 'block';
+    }
+
+    function appendChatMessage(role, text) {
+      if (!chatThread) return;
+      const messageEl = document.createElement('div');
+      messageEl.className = `chat-message ${role}`;
+      messageEl.textContent = text;
+      chatThread.appendChild(messageEl);
+      chatThread.scrollTop = chatThread.scrollHeight;
+    }
+
+    function updateCrewAfterResult(result) {
+      const topic = result && result.topic ? result.topic : (topicInput.value || 'the current production');
+      crewStatus.textContent = 'AI Crew updated your production.';
+      crewMessage.textContent = `Use the chat box to refine "${topic}" with prompts like "Make the hook stronger", "Change Scene 3", "Make the video shorter", or "Improve the lighting".`;
+      if (chatThread && chatThread.children.length === 1 && chatThread.firstElementChild.textContent.includes('standing by')) {
+         chatThread.innerHTML = ''; // Clear initial message
+      }
+      appendChatMessage('ai', `Your production "${topic}" has been updated.`);
+    }
+
+    // New: Professional screenplay formatting
+    function buildScreenplayHTML(result) {
+      if (!result || !result.finalPackage || !result.finalPackage.script) return '<p>No screenplay data available.</p>';
+      const script = result.finalPackage.script;
+      const sections = script.sections || [];
+
+      let html = '<div class="screenplay-page">';
+
+      // Title page
+      html += '<div class="title-page">';
+      html += `<h1>${escapeHtml(script.title || 'Untitled Screenplay')}</h1>`;
+      if (script.author) {
+        html += `<p class="byline">by ${escapeHtml(script.author)}</p>`;
+      }
+      if (script.version) {
+        html += `<p class="byline">Version: ${escapeHtml(script.version)}</p>`;
+      }
+      html += `<p style="text-align: center; margin-top: 3em; font-size: 11pt;">`;
+      html += `<strong>Format: ${escapeHtml(script.format || 'Educational Video')}</strong><br>`;
+      html += `Audience: ${escapeHtml(script.audience || 'General')}<br>`;
+      html += `Tone: ${escapeHtml(script.tone || 'Informative')}<br>`;
+      html += `Duration: ${escapeHtml(script.targetDuration || 'N/A')}`;
+      html += '</p></div>';
+
+      // Start of content
+      html += '<div class="transition">FADE IN:</div>';
+
+      if (script.hook) {
+        html += `<div class="action">${escapeHtml(script.hook)}</div>`;
+      }
+
+      sections.forEach(section => {
+        if (section.heading) {
+          html += `<div class="scene-heading">${escapeHtml(section.heading)}</div>`;
+        }
+        if (section.narration) {
+          html += `<div class="action">${escapeHtml(section.narration)}</div>`;
+        }
+        if (section.character) { // Assuming character-dialogue structure
+            html += `<div class="character">${escapeHtml(section.character)}</div>`;
+            if (section.parenthetical) {
+                html += `<div class="parenthetical">(${escapeHtml(section.parenthetical)})</div>`;
+            }
+            if (section.dialogue) {
+                html += `<div class="dialogue">${escapeHtml(section.dialogue)}</div>`;
+            }
+        }
+        // Handle visual suggestions as actions or descriptions if not part of a character block
+        if (section.visualSuggestions && Array.isArray(section.visualSuggestions)) {
+            section.visualSuggestions.forEach(visual => {
+                html += `<div class="action">(VISUAL: ${escapeHtml(visual)})</div>`;
+            });
+        } else if (section.visualSuggestions) {
+            html += `<div class="action">(VISUAL: ${escapeHtml(section.visualSuggestions)})</div>`;
+        }
+        if (section.onScreenText && Array.isArray(section.onScreenText)) {
+            section.onScreenText.forEach(text => {
+                html += `<div class="action">(ON-SCREEN TEXT: ${escapeHtml(text)})</div>`;
+            });
+        } else if (section.onScreenText) {
+            html += `<div class="action">(ON-SCREEN TEXT: ${escapeHtml(section.onScreenText)})</div>`;
+        }
+      });
+
+      html += '<div class="transition">FADE OUT.</div>';
+      html += '<div class="transition">THE END</div>';
+      html += '</div>';
+      return html;
+    }
+
+
+    function openScreenplayModal() {
+      if (!currentResult) return;
+      screenplayPreview.innerHTML = buildScreenplayHTML(currentResult);
+      screenplayModal.classList.add('open');
+      screenplayModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeScreenplayModal() {
+      screenplayModal.classList.remove('open');
+      screenplayModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function renderChatMessage(role, message) {
+      const chatThread = document.getElementById('chat-thread');
+
+      if (!chatThread) {
+        console.warn('[AI Crew] Chat thread element not found.');
+        return;
+      }
+
+      const bubble = document.createElement('div');
+
+      bubble.className =
+        role === 'user'
+          ? 'chat-message user-message'
+          : 'chat-message ai-message';
+
+      const label = document.createElement('div');
+      label.className = 'chat-message-label';
+      label.textContent =
+        role === 'user'
+          ? 'You'
+          : 'AI Crew';
+
+      const content = document.createElement('div');
+      content.className = 'chat-message-content';
+      content.textContent = message || '';
+
+      bubble.appendChild(label);
+      bubble.appendChild(content);
+
+      chatThread.appendChild(bubble);
+
+      chatThread.scrollTop = chatThread.scrollHeight;
+    }
+   async function sendContinueChat() {
+  const message = (crewChatInput?.value || '').trim();
+
+  // Never send an empty message to the API
+  if (!message) {
+    return;
+  }
+
+  // A production must exist before AI Crew can revise it
+  if (!currentResult || !currentResult.finalPackage) {
+    renderChatMessage(
+      'assistant',
+      'Please create a production first, then I can help you revise it.'
+    );
+    return;
+  }
+
+  // Show the user's message immediately
+  renderChatMessage('user', message);
+
+  // Clear the input
+  crewChatInput.value = '';
+
+  // Prevent duplicate submissions while processing
+  crewSendBtn.disabled = true;
+  crewChatInput.disabled = true;
+
+  if (chatAgentStatusText) {
+    chatAgentStatusText.textContent =
+      'AI Crew is updating your production...';
+  }
+
+  try {
+    const payload = {
+      message: message,
+      topic:
+        currentResult.topic ||
+        topicInput?.value ||
+        'Current production',
+      finalPackage: currentResult.finalPackage
+    };
+
+    console.log('[AI Crew] Sending revision:', payload);
+
+    const response = await fetch('/api/continue-chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    console.log('[AI Crew] Response:', data);
+
+    if (!response.ok || data.success === false) {
+      throw new Error(
+        data.error ||
+        'AI Crew could not update the production.'
+      );
+    }
+
+    // Store the revised production
+    currentResult = {
+      ...currentResult,
+      ...data,
+      finalPackage:
+        data.finalPackage ||
+        currentResult.finalPackage
+    };
+
+    // Render AI Crew response
+    renderChatMessage(
+      'assistant',
+      data.reply ||
+      data.message ||
+      'AI Crew updated your production.'
+    );
+
+    // Update the production/results area
+    if (typeof renderPipelineResults === 'function') {
+      renderPipelineResults(currentResult);
+    }
+
+    // Update AI Crew status
+    if (chatAgentStatusText) {
+      const agents =
+        Array.isArray(data.affectedAgents) &&
+        data.affectedAgents.length
+          ? data.affectedAgents.join(' â†’ ')
+          : 'Production';
+
+      chatAgentStatusText.textContent =
+        `Updated: ${agents}`;
+    }
+
+    if (chatProductionStatus) {
+      chatProductionStatus.textContent =
+        'Production updated successfully';
+    }
+
+    // Keep the production in local state if your
+    // existing persistence function is available
+    if (typeof saveCurrentProduction === 'function') {
+      try {
+        saveCurrentProduction();
+      } catch (saveError) {
+        console.warn(
+          '[AI Crew] Could not save production locally:',
+          saveError
+        );
+      }
+    }
+
+  } catch (error) {
+    console.error('[AI Crew] Revision error:', error);
+
+    renderChatMessage(
+      'assistant',
+      `I couldn't update the production right now. ${error.message || error}`
+    );
+
+    if (chatAgentStatusText) {
+      chatAgentStatusText.textContent =
+        'AI Crew is ready';
+    }
+
+  } finally {
+    crewSendBtn.disabled = false;
+    crewChatInput.disabled = false;
+    crewChatInput.focus();
+  }
+}
+
+
+    // =========================================
+    // WORD SCREENPLAY EXPORT
+    // =========================================
+
+    async function downloadScreenplayWord() {
+      if (!currentResult) {
+        alert('No production to download.');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/export-docx', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            topic:
+              currentResult.topic ||
+              topicInput.value ||
+              'Current production',
+            finalPackage: currentResult.finalPackage
+          })
+        });
+
+        if (!response.ok) {
+          const data =
+            await response.json().catch(() => ({}));
+
+          throw new Error(
+            data.error ||
+            'Download Word failed.'
+          );
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+
+        link.download =
+          `${(
+            currentResult.topic ||
+            topicInput.value ||
+            'creatorpilot_production'
+          )
+            .replace(/[^a-z0-9]/gi, '_')
+            .toLowerCase()}_screenplay.docx`;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+      } catch (error) {
+        console.error(
+          'Word Export Error:',
+          error
+        );
+
+        alert(
+          error.message ||
+          'The Word export failed.'
+        );
+      }
+    }
+    async function downloadScreenplayPDF() {
+      if (!currentResult) {
+        alert('No production to download.');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/export-pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            finalPackage: currentResult.finalPackage,
+            topic: currentResult.topic || topicInput.value || 'creatorpilot_production'
+          })
+        });
+
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.error || 'Download PDF failed.');
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${(currentResult.topic || topicInput.value || 'creatorpilot_production').replace(/[^a-z0-9]/gi, '_').toLowerCase()}_screenplay.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("PDF Export Error:", error);
+        alert(error.message || 'The PDF export failed.');
+      }
+    }
+
+    function viewScreenplay() {
+      if (!currentResult) {
+        alert('No screenplay to view.');
+        return;
+      }
+      openScreenplayModal();
+    }
+
+    window.sendContinueChat = sendContinueChat;
+    window.downloadScreenplayWord = downloadScreenplayWord;
+    window.downloadScreenplayPDF = downloadScreenplayPDF;
+    window.viewScreenplay = viewScreenplay;
 
     // Check connectivity on load
     async function checkHealth() {
       try {
         apiStatusDot.className = 'status-dot loading';
         apiStatusText.innerText = 'Connecting...';
-        
+
         const response = await fetch('/health');
         if (response.ok) {
-          const data = await response.json();
           apiStatusDot.className = 'status-dot';
-          apiStatusText.innerText = 'Connected (v1.0)';
+          apiStatusText.innerText = 'Online';
         } else {
           throw new Error('Health check returned ' + response.status);
         }
       } catch (e) {
         apiStatusDot.className = 'status-dot error';
-        apiStatusText.innerText = 'Server Offline';
+        apiStatusText.innerText = 'Offline';
       }
     }
+
+    setCrewIdleState();
+    closeScreenplayModalBtn.addEventListener('click', closeScreenplayModal);
+    screenplayModal.addEventListener('click', (event) => {
+      if (event.target === screenplayModal) {
+        closeScreenplayModal();
+      }
+    });
+    crewSendBtn.addEventListener('click', sendContinueChat);
+    crewChatInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        sendContinueChat();
+      }
+    });
+    viewScreenplayBtn.addEventListener('click', viewScreenplay);
+    downloadWordBtn.addEventListener('click', downloadScreenplayWord);
+    downloadPdfBtn.addEventListener('click', downloadScreenplayPDF);
 
     checkHealth();
 
     // Tab Switching Logic
     function switchTab(evt, tabId) {
-      // Get all panels and buttons
       const panels = document.querySelectorAll('.tab-panel');
-      const buttons = document.querySelectorAll('.tab-btn');
+      const buttons = document.querySelectorAll('.tabs-header .tab-btn');
 
-      // Hide all panels, remove active class from all buttons
       panels.forEach(panel => panel.classList.remove('active'));
       buttons.forEach(btn => btn.classList.remove('active'));
 
-      // Show current panel, activate current button
       document.getElementById(tabId).classList.add('active');
-      evt.currentTarget.classList.add('active');
-    }
-
-    // Interactive step animation during loading
-    let stepInterval = null;
-    function startLoadingAnimation() {
-      const steps = [
-        document.getElementById('step-1'),
-        document.getElementById('step-2'),
-        document.getElementById('step-3'),
-        document.getElementById('step-4'),
-        document.getElementById('step-5')
-      ];
-
-      // Clear previous active/completed classes
-      steps.forEach(s => {
-        s.className = 'step-item';
-      });
-
-      let currentStepIdx = 0;
-      steps[0].classList.add('active');
-
-      // Simulate progressing steps sequentially
-      // Since it is a synchronous API, we update visual steps periodically
-      // to give feedback, but we will make them all 'completed' when the real data arrives
-      stepInterval = setInterval(() => {
-        if (currentStepIdx < steps.length - 1) {
-          steps[currentStepIdx].classList.remove('active');
-          steps[currentStepIdx].classList.add('completed');
-          currentStepIdx++;
-          steps[currentStepIdx].classList.add('active');
+      if (evt) { // evt can be null if called programmatically
+        evt.currentTarget.classList.add('active');
+      } else { // Handle programmatic call by activating the first button for the tab
+        const correspondingButton = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(tabId));
+        if (correspondingButton) {
+          correspondingButton.classList.add('active');
         }
-      }, 7000); // Progress visually every 7 seconds
-    }
-
-    function stopLoadingAnimation(success = true) {
-      if (stepInterval) {
-        clearInterval(stepInterval);
-        stepInterval = null;
-      }
-
-      const steps = [
-        document.getElementById('step-1'),
-        document.getElementById('step-2'),
-        document.getElementById('step-3'),
-        document.getElementById('step-4'),
-        document.getElementById('step-5')
-      ];
-
-      if (success) {
-        steps.forEach(s => {
-          s.className = 'step-item completed';
-        });
-      } else {
-        steps.forEach(s => {
-          if (s.classList.contains('active')) {
-            s.className = 'step-item'; // clear active on crash
-          }
-        });
       }
     }
+
+    // Loading animation messages
+    const loadingMessages = [
+      "AI Crew is working on your production...",
+      "Researching your topic...",
+      "Building the script...",
+      "Designing the storyboard...",
+      "Planning production...",
+      "Running the final quality review..."
+    ];
+    let currentLoadingMessageIndex = 0;
+    let loadingMessageInterval = null;
+
+    function updateLoadingStage(stageIndex) {
+  const stages = [
+    document.getElementById('stage-research'),
+    document.getElementById('stage-script'),
+    document.getElementById('stage-storyboard'),
+    document.getElementById('stage-production'),
+    document.getElementById('stage-quality')
+  ];
+
+  stages.forEach((stage, index) => {
+    if (!stage) return;
+
+    stage.classList.remove('active', 'completed');
+
+    if (index < stageIndex) {
+      stage.classList.add('completed');
+    } else if (index === stageIndex) {
+      stage.classList.add('active');
+    }
+  });
+}
+
+function startLoadingMessageRotation() {
+  currentLoadingMessageIndex = 0;
+
+  loadingMessage.textContent =
+    loadingMessages[0];
+
+  loadingSubMessage.textContent = '';
+
+  updateLoadingStage(0);
+
+  if (loadingMessageInterval) {
+    clearInterval(loadingMessageInterval);
+  }
+
+  loadingMessageInterval = setInterval(() => {
+    if (currentLoadingMessageIndex < loadingMessages.length - 1) {
+      currentLoadingMessageIndex++;
+
+      const currentMessage =
+        loadingMessages[currentLoadingMessageIndex];
+
+      loadingSubMessage.textContent =
+        currentMessage;
+
+      updateLoadingStage(
+        currentLoadingMessageIndex
+      );
+    }
+  }, 5000);
+}
+
+function stopLoadingMessageRotation() {
+  if (loadingMessageInterval) {
+    clearInterval(loadingMessageInterval);
+    loadingMessageInterval = null;
+  }
+}
 
     // Submit Action
     runBtn.addEventListener('click', async () => {
@@ -1145,14 +2013,24 @@
         return;
       }
 
-      // Reset state
+      // Reset state and show loading
       errorBox.style.display = 'none';
       resultsContainer.style.display = 'none';
-      loadingContainer.style.display = 'flex';
+      createProductionCard.style.display = 'none'; // Hide create card
+      mainWorkspace.style.display = 'grid'; // Show main workspace
+      loadingContainer.style.display = 'flex'; // Show loading
+
+      productionTitleDisplay.textContent = topic; // Display topic immediately
+      productionStatusMessage.textContent = 'AI Crew is initiating your production.';
+      currentProductionStatus.textContent = 'In Progress';
+      overallQualityScore.textContent = '--';
+      allStages.forEach(stage => stage.classList.remove('active', 'completed'));
+      stageResearch.classList.add('active'); // First stage active
+
       runBtn.disabled = true;
       topicInput.disabled = true;
 
-      startLoadingAnimation();
+      startLoadingMessageRotation();
 
       try {
         const response = await fetch('/api/run', {
@@ -1163,69 +2041,393 @@
           body: JSON.stringify({ topic })
         });
 
-        const data = await response.json();
+        // Safe JSON parsing and error checking
+        let data;
+        try {
+            data = await response.json();
+        } catch (jsonError) {
+            console.error("AI Crew: Malformed JSON response.", jsonError);
+            throw new Error("AI Crew couldn't process the production. Please try again.");
+        }
 
-        if (response.status === 400 || data.success === false) {
-          stopLoadingAnimation(false);
-          loadingContainer.style.display = 'none';
-          runBtn.disabled = false;
-          topicInput.disabled = false;
-
-          // Render Error
-          errorStageLabel.textContent = capitalizeFirst(data.failedStage || 'Orchestration');
-          errorText.textContent = data.error || 'Pipeline execution failed.';
-          errorTrace.textContent = JSON.stringify(data, null, 2);
-          errorBox.style.display = 'block';
-          errorBox.scrollIntoView({ behavior: 'smooth' });
-          return;
+        if (!response.ok || data.success === false) {
+          const errorMessage = data.error || 'AI Crew encountered an issue while creating your production.';
+          console.error("AI Crew Error:", data); // Log technical error
+          throw new Error(errorMessage);
         }
 
         // Success Path
-        stopLoadingAnimation(true);
+        stopLoadingMessageRotation();
         loadingContainer.style.display = 'none';
-        runBtn.disabled = false;
-        topicInput.disabled = false;
 
-        // Save and Render Results
+        currentResult = data;
         renderPipelineResults(data);
-        resultsContainer.style.display = 'flex';
+        resultsContainer.style.display = 'block'; // Show results
         resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        updateCrewAfterResult(data);
 
       } catch (err) {
-        stopLoadingAnimation(false);
+        stopLoadingMessageRotation();
         loadingContainer.style.display = 'none';
+        errorBox.style.display = 'block';
+        errorStageLabel.textContent = currentResult?.failedStage ? capitalizeFirst(currentResult.failedStage) : 'Production';
+        errorText.textContent = err.message || 'An unexpected error occurred. Please try again.';
+        errorTrace.textContent = currentResult ? JSON.stringify(currentResult, null, 2) : err.stack || err.message || String(err);
+        errorBox.scrollIntoView({ behavior: 'smooth' });
+
+        // Update production status to reflect failure
+        productionStatusMessage.textContent = `Production failed: ${err.message}`;
+        currentProductionStatus.textContent = 'Failed';
+        allStages.forEach(stage => {
+          if (stage.classList.contains('active')) {
+            stage.classList.remove('active');
+            // Optionally add a 'failed' class
+          }
+        });
+      } finally {
         runBtn.disabled = false;
         topicInput.disabled = false;
-
-        errorStageLabel.textContent = 'Network/Web';
-        errorText.textContent = 'An error occurred while communicating with the server.';
-        errorTrace.textContent = err.stack || err.message || String(err);
-        errorBox.style.display = 'block';
-        errorBox.scrollIntoView({ behavior: 'smooth' });
       }
     });
 
     function capitalizeFirst(str) {
-      if (!str) return 'Orchestration';
+      if (!str) return 'Unknown';
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+
+    // Allow Enter to create the production.
+    // Trigger the actual Create with AI Crew button.
+    const productionRunButton =
+      document.getElementById('run-btn');
+
+    if (topicInput && productionRunButton) {
+      topicInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+
+          if (!productionRunButton.disabled) {
+            productionRunButton.click();
+          }
+        }
+      });
+    }
     // Dynamic Result Rendering function
     function renderPipelineResults(result) {
-      // 1. Header Summary
-      document.getElementById('display-topic').textContent = result.topic || topicInput.value;
-      document.getElementById('display-score').textContent = result.overallScore ?? '--';
-      
+      currentResult = result || currentResult;
+      const effectiveResult = currentResult || result;
+
+      // 1. Update Main Workspace Production Status
+      productionTitleDisplay.textContent = effectiveResult.topic || topicInput.value;
+      currentProductionStatus.textContent = effectiveResult.status === 'PASS' ? 'Completed' : capitalizeFirst(effectiveResult.status || 'Warning');
+      overallQualityScore.textContent = effectiveResult.overallScore ?? '--';
+      productionStatusMessage.textContent = 'Production review complete. Ready for your revisions!';
+      // Synchronize the five AI Crew stages.
+      allStages.forEach(stage =>
+        stage.classList.remove('active', 'completed')
+      );
+
+      if (effectiveResult.pipelineStatus) {
+        const stageOrder = [
+          'research',
+          'script',
+          'storyboard',
+          'production',
+          'quality'
+        ];
+
+        stageOrder.forEach(stageName => {
+          const stageData =
+            effectiveResult.pipelineStatus[stageName];
+
+          const stageElement =
+            document.getElementById(`stage-${stageName}`);
+
+          if (!stageElement || !stageData) return;
+
+          if (stageData.status === 'completed') {
+            stageElement.classList.add('completed');
+          }
+
+          if (stageData.status === 'in_progress') {
+            stageElement.classList.add('active');
+          }
+        });
+      } else {
+        // Fallback when detailed pipeline status is unavailable.
+        if (
+          effectiveResult.success !== false &&
+          effectiveResult.status === 'PASS'
+        ) {
+          allStages.forEach(stage =>
+            stage.classList.add('completed')
+          );
+        }
+      }
+
+
+      // 2. Summary Header
+      document.getElementById('display-topic').textContent = effectiveResult.topic || topicInput.value;
+      document.getElementById('display-score').textContent = effectiveResult.overallScore ?? '--';
+
       const statusBadge = document.getElementById('display-status');
-      statusBadge.textContent = result.status || 'WARNING';
-      statusBadge.className = 'badge-status ' + (result.status || 'WARNING');
+      statusBadge.textContent = effectiveResult.status || 'WARNING';
+      statusBadge.className = 'badge-status ' + (effectiveResult.status || 'WARNING');
 
-      const pkg = result.finalPackage || {};
+      const pkg = effectiveResult.finalPackage || {};
 
-      // 2. Render Research Tab
+      // 3. Render Script Tab
+      const script = pkg.script || {};
+      document.getElementById('script-format').textContent = script.format || 'Educational Video';
+      document.getElementById('script-audience').textContent = script.audience || 'Solo Creators';
+      document.getElementById('script-tone').textContent = script.tone || 'Informative';
+      document.getElementById('script-duration').textContent = script.targetDuration || '5-7 mins';
+      document.getElementById('script-hook').textContent = script.hook || 'No opening hook returned.';
+
+      const sectionsList = document.getElementById('script-sections-list');
+      sectionsList.innerHTML = '';
+      const sections = script.sections || [];
+      if (sections.length > 0) {
+        sections.forEach(s => {
+          const card = document.createElement('div');
+          card.className = 'content-box'; // Using general content-box for sections
+
+          const header = document.createElement('h3');
+          header.textContent = s.heading || 'Untitled Section';
+          card.appendChild(header);
+
+          if (s.character) {
+              const characterDiv = document.createElement('p');
+              characterDiv.innerHTML = `<strong>${escapeHtml(s.character)}:</strong>`;
+              if (s.parenthetical) {
+                  characterDiv.innerHTML += ` <em>(${escapeHtml(s.parenthetical)})</em>`;
+              }
+              if (s.dialogue) {
+                  characterDiv.innerHTML += ` ${escapeHtml(s.dialogue)}`;
+              }
+              card.appendChild(characterDiv);
+          } else if (s.narration) {
+              const narrationPara = document.createElement('p');
+              narrationPara.textContent = s.narration;
+              card.appendChild(narrationPara);
+          }
+
+          if (s.visualSuggestions && Array.isArray(s.visualSuggestions) && s.visualSuggestions.length > 0) {
+            const visualTitle = document.createElement('p');
+            visualTitle.innerHTML = '<strong>Visual Cues:</strong>';
+            card.appendChild(visualTitle);
+            const visualList = document.createElement('ul');
+            visualList.className = 'list-styled';
+            s.visualSuggestions.forEach(v => {
+              const li = document.createElement('li');
+              li.textContent = v;
+              visualList.appendChild(li);
+            });
+            card.appendChild(visualList);
+          }
+          if (s.onScreenText && Array.isArray(s.onScreenText) && s.onScreenText.length > 0) {
+            const onScreenTitle = document.createElement('p');
+            onScreenTitle.innerHTML = '<strong>On-Screen Text:</strong>';
+            card.appendChild(onScreenTitle);
+            const onScreenList = document.createElement('ul');
+            onScreenList.className = 'list-styled';
+            s.onScreenText.forEach(t => {
+              const li = document.createElement('li');
+              li.textContent = t;
+              onScreenList.appendChild(li);
+            });
+            card.appendChild(onScreenList);
+          }
+
+          sectionsList.appendChild(card);
+        });
+      } else {
+        sectionsList.innerHTML = '<p>No script sections returned.</p>';
+      }
+
+      // 4. Render Storyboard Tab
+      const storyboard = pkg.storyboard || {};
+      document.getElementById('storyboard-title').textContent = `Visual Storyboard for "${storyboard.title || 'Video Script'}"`;
+
+      const storyboardGrid = document.getElementById('storyboard-grid-list');
+      storyboardGrid.innerHTML = '';
+      const shots = storyboard.shots || [];
+      if (shots.length > 0) {
+        shots.forEach(sh => {
+          const scard = document.createElement('div');
+          scard.className = 'card'; // Using general card class
+          scard.style.padding = '0.8rem';
+
+          const cardHeader = document.createElement('div');
+          cardHeader.style.display = 'flex';
+          cardHeader.style.justifyContent = 'space-between';
+          cardHeader.style.alignItems = 'center';
+          cardHeader.style.marginBottom = '0.5rem';
+
+          const shotBadge = document.createElement('span');
+          shotBadge.className = 'task-tag'; // Reusing task-tag for styling
+          shotBadge.textContent = `SHOT #${sh.shotNumber}`;
+          cardHeader.appendChild(shotBadge);
+
+          const framingSpanHeader = document.createElement('span');
+          framingSpanHeader.style.fontSize = '0.75rem';
+          framingSpanHeader.style.color = 'var(--muted)';
+          framingSpanHeader.style.fontWeight = 'bold';
+          framingSpanHeader.textContent = sh.cameraFraming || 'Medium Shot';
+          cardHeader.appendChild(framingSpanHeader);
+          scard.appendChild(cardHeader);
+
+          const descDiv = document.createElement('div');
+          descDiv.style.marginBottom = '0.5rem';
+          const visualLabel = document.createElement('strong');
+          visualLabel.textContent = 'Visual: ';
+          descDiv.appendChild(visualLabel);
+          descDiv.appendChild(document.createTextNode(sh.visualDescription || ''));
+          scard.appendChild(descDiv);
+
+          const audioDiv = document.createElement('div');
+          audioDiv.style.marginBottom = '0.7rem';
+          const audioLabel = document.createElement('strong');
+          audioLabel.textContent = 'Voiceover: ';
+          audioDiv.appendChild(audioLabel);
+          audioDiv.appendChild(document.createTextNode(`"${sh.voiceover || 'None'}"`));
+          scard.appendChild(audioDiv);
+
+          const footerDiv = document.createElement('div');
+          footerDiv.style.display = 'flex';
+          footerDiv.style.justifyContent = 'space-between';
+          footerDiv.style.gap = '0.5rem';
+          footerDiv.style.color = 'var(--muted)';
+          footerDiv.style.fontSize = '0.75rem';
+
+          const durationSpan = document.createElement('span');
+          durationSpan.textContent = `Duration: ${sh.estimatedDuration || 'N/A'}`;
+          footerDiv.appendChild(durationSpan);
+          const framingSpanFooter = document.createElement('span');
+          framingSpanFooter.textContent = `Framing: ${sh.cameraFraming || 'N/A'}`;
+          footerDiv.appendChild(framingSpanFooter);
+          scard.appendChild(footerDiv);
+
+          storyboardGrid.appendChild(scard);
+        });
+      } else {
+        storyboardGrid.innerHTML = '<p>No storyboard shots returned.</p>';
+      }
+
+      // 5. Render Production Plan Tab
+      const prod = pkg.productionPlan || {};
+      const tableBody = document.getElementById('production-shot-table-body');
+      tableBody.innerHTML = '';
+      const prodShots = prod.shotList || [];
+      if (prodShots.length > 0) {
+        prodShots.forEach(ps => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td style="font-weight: bold; color: var(--accent);">#${ps.shotNumber}</td>
+            <td style="font-weight: bold; color: var(--accent);">Story #${ps.storyboardShotNumber}</td>
+            <td><span class="task-tag" style="background-color: var(--accent-soft); color: #a5b4fc; border-color: var(--accent);">${escapeHtml(ps.shotType)}</span></td>
+            <td style="color: var(--subtitle);">${escapeHtml(ps.location || 'Studio')}</td>
+            <td style="font-size: 0.85rem;">${escapeHtml(ps.description)}</td>
+            <td style="font-size: 0.85rem; color: var(--subtitle); font-style: italic;">${escapeHtml(ps.setupInstructions || 'Standard capture.')}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--muted);">No production plan shots returned.</td></tr>';
+      }
+
+      const checklistContainer = document.getElementById('production-checklist-tasks');
+      checklistContainer.innerHTML = '';
+      const checklist = prod.filmingChecklist || prod.checklist || [];
+      if (checklist.length > 0) {
+        checklist.forEach(task => {
+          const tcard = document.createElement('div');
+          tcard.className = 'task-item';
+
+          tcard.innerHTML = `
+            <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} />
+            <span class="task-tag">${escapeHtml(task.stage || 'Production')}</span>
+            <span style="color: var(--subtitle); font-size: 0.9rem; flex: 1;">${escapeHtml(task.task || task.description)}</span>
+          `;
+          checklistContainer.appendChild(tcard);
+        });
+      } else {
+        checklistContainer.innerHTML = '<p style="color: var(--muted);">No logistical tasks returned.</p>';
+      }
+
+      // 6. Render Quality Tab
+      const report = pkg.qualityReport || {};
+      document.getElementById('quality-score-value').textContent = report.overallScore ?? effectiveResult.overallScore ?? '--';
+
+      const qualityBadge = document.getElementById('quality-status-badge');
+      qualityBadge.textContent = report.status || effectiveResult.status || 'WARNING';
+      qualityBadge.className = 'badge-status ' + (report.status || effectiveResult.status || 'WARNING');
+
+      document.getElementById('quality-summary-text').textContent = report.summary || 'No quality summary audit details provided.';
+
+      const checksList = document.getElementById('quality-checks-list');
+      checksList.innerHTML = '';
+      const checks = report.checks || [];
+      if (checks.length > 0) {
+        checks.forEach(c => {
+          const ccard = document.createElement('div');
+          ccard.className = 'audit-check-card';
+
+          const header = document.createElement('div');
+          header.className = 'audit-check-header';
+
+          const categorySpan = document.createElement('span');
+          categorySpan.className = 'audit-check-name';
+          categorySpan.textContent = String(c.category || 'Compliance').toUpperCase();
+          header.appendChild(categorySpan);
+
+          const statusTag = document.createElement('span');
+          statusTag.className = 'audit-check-tag';
+          const statusText = String(c.status || 'PASS').toUpperCase();
+          statusTag.textContent = statusText;
+          if (statusText === 'PASS') {
+            statusTag.classList.add('pass');
+          } else {
+            statusTag.classList.add('fail');
+          }
+          header.appendChild(statusTag);
+          ccard.appendChild(header);
+
+          const findingDiv = document.createElement('div');
+          findingDiv.className = 'audit-check-feedback';
+          findingDiv.style.marginBottom = '0.5rem';
+          const findingLabel = document.createElement('strong');
+          findingLabel.textContent = 'Finding: ';
+          findingDiv.appendChild(findingLabel);
+          findingDiv.appendChild(document.createTextNode(c.finding || ''));
+          ccard.appendChild(findingDiv);
+
+          if (c.evidence && c.evidence !== 'N/A') {
+            const evidenceDiv = document.createElement('div');
+            evidenceDiv.className = 'audit-check-feedback';
+            evidenceDiv.style.fontStyle = 'italic';
+            evidenceDiv.style.borderLeft = '2px solid var(--accent)'; // Reusing accent color
+            evidenceDiv.style.paddingLeft = '0.5rem';
+            evidenceDiv.style.marginTop = '0.25rem';
+
+            const evidenceLabel = document.createElement('strong');
+            evidenceLabel.style.fontStyle = 'normal';
+            evidenceLabel.textContent = 'Evidence: ';
+            evidenceDiv.appendChild(evidenceLabel);
+            evidenceDiv.appendChild(document.createTextNode(c.evidence));
+            ccard.appendChild(evidenceDiv);
+          }
+
+          checksList.appendChild(ccard);
+        });
+      } else {
+        checksList.innerHTML = '<p style="color: var(--muted);">No specific compliance audit checks returned.</p>';
+      }
+
+      // 7. Render Research Tab (now last tab)
       const brief = pkg.researchBrief || {};
       document.getElementById('research-summary').textContent = brief.summary || 'No summary generated.';
-      
+
       const findingsList = document.getElementById('research-findings');
       findingsList.innerHTML = '';
       const findings = [
@@ -1265,247 +2467,362 @@
         recsList.appendChild(li);
       }
 
-      // 3. Render Script Tab
-      const script = pkg.script || {};
-      document.getElementById('script-format').textContent = script.format || 'Educational Video';
-      document.getElementById('script-audience').textContent = script.audience || 'Solo Creators';
-      document.getElementById('script-tone').textContent = script.tone || 'Informative';
-      document.getElementById('script-duration').textContent = script.targetDuration || '5-7 mins';
-      document.getElementById('script-hook').textContent = script.hook || 'No intro hook returned.';
-
-      const sectionsList = document.getElementById('script-sections-list');
-      sectionsList.innerHTML = '';
-      const sections = script.sections || [];
-      if (sections.length > 0) {
-        sections.forEach(s => {
-          const card = document.createElement('div');
-          card.className = 'script-section-card';
-          
-          const header = document.createElement('div');
-          header.className = 'script-section-header';
-          header.textContent = s.heading || 'Untitled Section';
-          card.appendChild(header);
-
-          const grid = document.createElement('div');
-          grid.className = 'script-grid';
-
-          const dialogueCol = document.createElement('div');
-          dialogueCol.className = 'script-dialogue';
-          
-          const dialogueTitle = document.createElement('div');
-          dialogueTitle.className = 'script-cue-title';
-          dialogueTitle.textContent = 'Narration & Audio Dialogue';
-          dialogueCol.appendChild(dialogueTitle);
-          
-          const dialoguePara = document.createElement('p');
-          dialoguePara.textContent = s.narration || 'No dialogue content.';
-          dialogueCol.appendChild(dialoguePara);
-          grid.appendChild(dialogueCol);
-
-          const visualCol = document.createElement('div');
-          visualCol.className = 'script-visuals';
-          
-          const visualTitle = document.createElement('div');
-          visualTitle.className = 'script-cue-title';
-          visualTitle.textContent = 'Visual Layout & B-Roll Cues';
-          visualCol.appendChild(visualTitle);
-
-          if (Array.isArray(s.visualSuggestions)) {
-            const visualList = document.createElement('ul');
-            visualList.style.listStyleType = 'none';
-            s.visualSuggestions.forEach(v => {
-              const li = document.createElement('li');
-              li.textContent = v;
-              visualList.appendChild(li);
-            });
-            visualCol.appendChild(visualList);
-          } else {
-            const visualPara = document.createElement('p');
-            visualPara.textContent = s.visualSuggestions || 'No visual description.';
-            visualCol.appendChild(visualPara);
-          }
-          grid.appendChild(visualCol);
-
-          card.appendChild(grid);
-          sectionsList.appendChild(card);
-        });
-      } else {
-        sectionsList.innerHTML = '<p>No script sections returned.</p>';
-      }
-
-      // 4. Render Storyboard Tab
-      const storyboard = pkg.storyboard || {};
-      document.getElementById('storyboard-title').textContent = `Visual Storyboard for "${storyboard.title || 'Video Script'}"`;
-      
-      const storyboardGrid = document.getElementById('storyboard-grid-list');
-      storyboardGrid.innerHTML = '';
-      const shots = storyboard.shots || [];
-      if (shots.length > 0) {
-        shots.forEach(sh => {
-          const scard = document.createElement('div');
-          scard.className = 'storyboard-card';
-          
-          const cardHeader = document.createElement('div');
-          cardHeader.style.display = 'flex';
-          cardHeader.style.justifyContent = 'space-between';
-          cardHeader.style.alignItems = 'center';
-
-          const shotBadge = document.createElement('span');
-          shotBadge.className = 'shot-badge';
-          shotBadge.textContent = `SHOT #${sh.shotNumber}`;
-          cardHeader.appendChild(shotBadge);
-
-          const framingSpanHeader = document.createElement('span');
-          framingSpanHeader.style.fontSize = '0.75rem';
-          framingSpanHeader.style.color = '#64748b';
-          framingSpanHeader.style.fontWeight = 'bold';
-          framingSpanHeader.textContent = sh.cameraFraming || 'Medium Shot';
-          cardHeader.appendChild(framingSpanHeader);
-          scard.appendChild(cardHeader);
-
-          const descDiv = document.createElement('div');
-          descDiv.className = 'storyboard-desc';
-          const visualLabel = document.createElement('strong');
-          visualLabel.textContent = 'Visual: ';
-          descDiv.appendChild(visualLabel);
-          descDiv.appendChild(document.createTextNode(sh.visualDescription || ''));
-          scard.appendChild(descDiv);
-
-          const audioDiv = document.createElement('div');
-          audioDiv.className = 'storyboard-audio';
-          const audioLabel = document.createElement('strong');
-          audioLabel.textContent = 'Voiceover: ';
-          audioDiv.appendChild(audioLabel);
-          audioDiv.appendChild(document.createTextNode(`"${sh.voiceover || 'None'}"`));
-          scard.appendChild(audioDiv);
-
-          const footerDiv = document.createElement('div');
-          footerDiv.className = 'storyboard-footer';
-          const durationSpan = document.createElement('span');
-          durationSpan.textContent = `Duration: ${sh.estimatedDuration || 'N/A'}`;
-          footerDiv.appendChild(durationSpan);
-          const framingSpanFooter = document.createElement('span');
-          framingSpanFooter.textContent = `Framing: ${sh.cameraFraming || 'N/A'}`;
-          footerDiv.appendChild(framingSpanFooter);
-          scard.appendChild(footerDiv);
-
-          storyboardGrid.appendChild(scard);
-        });
-      } else {
-        storyboardGrid.innerHTML = '<p>No storyboard shots returned.</p>';
-      }
-
-      // 5. Render Production Plan Tab
-      const prod = pkg.productionPlan || {};
-      const tableBody = document.getElementById('production-shot-table-body');
-      tableBody.innerHTML = '';
-      const prodShots = prod.shotList || [];
-      if (prodShots.length > 0) {
-        prodShots.forEach(ps => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td style="font-weight: bold; color: #6366f1;">#${ps.shotNumber}</td>
-            <td style="font-weight: bold; color: #8b5cf6;">Story #${ps.storyboardShotNumber}</td>
-            <td><span class="task-tag" style="background-color: #1e1b4b; color: #a5b4fc;">${escapeHtml(ps.shotType)}</span></td>
-            <td style="color: #cbd5e1;">${escapeHtml(ps.location || 'Studio')}</td>
-            <td style="font-size: 0.85rem;">${escapeHtml(ps.description)}</td>
-            <td style="font-size: 0.85rem; color: #cbd5e1; font-style: italic;">${escapeHtml(ps.setupInstructions || 'Standard capture.')}</td>
-          `;
-          tableBody.appendChild(row);
-        });
-      } else {
-        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No production plan shots returned.</td></tr>';
-      }
-
-      const checklistContainer = document.getElementById('production-checklist-tasks');
-      checklistContainer.innerHTML = '';
-      const checklist = prod.filmingChecklist || prod.checklist || [];
-      if (checklist.length > 0) {
-        checklist.forEach(task => {
-          const tcard = document.createElement('div');
-          tcard.className = 'task-item';
-          
-          tcard.innerHTML = `
-            <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} />
-            <span class="task-tag">${escapeHtml(task.stage || 'Production')}</span>
-            <span style="color: #cbd5e1; font-size: 0.9rem; flex: 1;">${escapeHtml(task.task || task.description)}</span>
-          `;
-          checklistContainer.appendChild(tcard);
-        });
-      } else {
-        checklistContainer.innerHTML = '<p>No logistical tasks returned.</p>';
-      }
-
-      // 6. Render Quality Tab
-      const report = pkg.qualityReport || {};
-      document.getElementById('quality-score-value').textContent = report.overallScore ?? result.overallScore ?? '--';
-      
-      const qualityBadge = document.getElementById('quality-status-badge');
-      qualityBadge.textContent = report.status || result.status || 'WARNING';
-      qualityBadge.className = 'badge-status ' + (report.status || result.status || 'WARNING');
-
-      document.getElementById('quality-summary-text').textContent = report.summary || 'No quality summary audit details provided.';
-
-      const checksList = document.getElementById('quality-checks-list');
-      checksList.innerHTML = '';
-      const checks = report.checks || [];
-      if (checks.length > 0) {
-        checks.forEach(c => {
-          const ccard = document.createElement('div');
-          ccard.className = 'audit-check-card';
-          ccard.style.marginBottom = '1rem';
-          
-          const header = document.createElement('div');
-          header.className = 'audit-check-header';
-          
-          const categorySpan = document.createElement('span');
-          categorySpan.className = 'audit-check-name';
-          categorySpan.textContent = String(c.category || 'Compliance').toUpperCase();
-          header.appendChild(categorySpan);
-
-          const statusTag = document.createElement('span');
-          statusTag.className = 'audit-check-tag';
-          const statusText = String(c.status || 'PASS').toUpperCase();
-          statusTag.textContent = statusText;
-          if (statusText === 'PASS') {
-            statusTag.classList.add('pass');
-          } else {
-            statusTag.classList.add('fail');
-          }
-          header.appendChild(statusTag);
-          ccard.appendChild(header);
-
-          const findingDiv = document.createElement('div');
-          findingDiv.className = 'audit-check-feedback';
-          findingDiv.style.marginBottom = '0.5rem';
-          const findingLabel = document.createElement('strong');
-          findingLabel.textContent = 'Finding: ';
-          findingDiv.appendChild(findingLabel);
-          findingDiv.appendChild(document.createTextNode(c.finding || ''));
-          ccard.appendChild(findingDiv);
-
-          if (c.evidence && c.evidence !== 'N/A') {
-            const evidenceDiv = document.createElement('div');
-            evidenceDiv.className = 'audit-check-feedback';
-            evidenceDiv.style.fontStyle = 'italic';
-            evidenceDiv.style.borderLeft = '2px solid #ef4444';
-            evidenceDiv.style.paddingLeft = '0.5rem';
-            evidenceDiv.style.marginTop = '0.25rem';
-            
-            const evidenceLabel = document.createElement('strong');
-            evidenceLabel.style.fontStyle = 'normal';
-            evidenceLabel.textContent = 'Evidence: ';
-            evidenceDiv.appendChild(evidenceLabel);
-            evidenceDiv.appendChild(document.createTextNode(c.evidence));
-            ccard.appendChild(evidenceDiv);
-          }
-
-          checksList.appendChild(ccard);
-        });
-      } else {
-        checksList.innerHTML = '<p>No specific compliance audit checks returned.</p>';
-      }
+      // Activate the first tab by default when results render
+      switchTab(null, 'tab-script');
     }
   </script>
+
+<script>
+/* CREATORPILOT_STAGE_SYNC_V1 */
+
+/*
+ * Synchronise the visual pipeline with the AI Crew.
+ * The actual backend remains responsible for the real work.
+ * This controls only the visual progress indicator.
+ */
+
+let creatorPilotStageTimer = null;
+let creatorPilotCurrentStage = 0;
+
+const CREATOR_PILOT_STAGES = [
+  {
+    name: 'Research',
+    message: 'Researching your topic...'
+  },
+  {
+    name: 'Script',
+    message: 'Writing your screenplay...'
+  },
+  {
+    name: 'Storyboard',
+    message: 'Planning your scenes...'
+  },
+  {
+    name: 'Production',
+    message: 'Preparing the production plan...'
+  },
+  {
+    name: 'Quality',
+    message: 'Running the final quality review...'
+  }
+];
+
+function getPipelineStageCards() {
+  return Array.from(
+    document.querySelectorAll('.stage-card')
+  ).slice(0, 5);
+}
+
+function updatePipelineStageUI(activeIndex) {
+
+  const cards = getPipelineStageCards();
+
+  cards.forEach((card, index) => {
+
+    const state = card.querySelector('.stage-state');
+
+    if (!state) return;
+
+    card.classList.remove(
+      'active',
+      'completed',
+      'waiting',
+      'failed'
+    );
+
+    state.classList.remove(
+      'active',
+      'completed',
+      'waiting',
+      'failed'
+    );
+
+    if (index < activeIndex) {
+
+      card.classList.add('completed');
+      state.classList.add('completed');
+      state.textContent = 'Completed';
+
+    } else if (index === activeIndex) {
+
+      card.classList.add('active');
+      state.classList.add('active');
+      state.textContent = 'Working...';
+
+    } else {
+
+      card.classList.add('waiting');
+      state.classList.add('waiting');
+      state.textContent = 'Waiting';
+    }
+  });
+
+  const loadingMessage =
+    document.getElementById('loading-message');
+
+  if (
+    loadingMessage &&
+    CREATOR_PILOT_STAGES[activeIndex]
+  ) {
+    loadingMessage.textContent =
+      'AI Crew is working on your production...';
+  }
+
+  const loadingDescription =
+    document.querySelector('#loading p');
+
+  if (
+    loadingDescription &&
+    CREATOR_PILOT_STAGES[activeIndex]
+  ) {
+    loadingDescription.textContent =
+      CREATOR_PILOT_STAGES[activeIndex].message;
+  }
+
+  if (typeof chatAgentStatusText !== 'undefined' &&
+      chatAgentStatusText) {
+
+    chatAgentStatusText.textContent =
+      CREATOR_PILOT_STAGES[activeIndex]
+        ? CREATOR_PILOT_STAGES[activeIndex].message
+        : 'AI Crew is working...';
+  }
+}
+
+function startCreatorPilotStageSync() {
+
+  stopCreatorPilotStageSync();
+
+  creatorPilotCurrentStage = 0;
+
+  updatePipelineStageUI(0);
+
+  creatorPilotStageTimer = setInterval(() => {
+
+    if (creatorPilotCurrentStage < 4) {
+      creatorPilotCurrentStage++;
+      updatePipelineStageUI(
+        creatorPilotCurrentStage
+      );
+    }
+
+  }, 5000);
+}
+
+function completeCreatorPilotStageSync() {
+
+  stopCreatorPilotStageSync();
+
+  const cards = getPipelineStageCards();
+
+  cards.forEach(card => {
+
+    const state = card.querySelector('.stage-state');
+
+    card.classList.remove(
+      'active',
+      'waiting',
+      'failed'
+    );
+
+    card.classList.add('completed');
+
+    if (state) {
+
+      state.classList.remove(
+        'active',
+        'waiting',
+        'failed'
+      );
+
+      state.classList.add('completed');
+      state.textContent = 'Completed';
+    }
+  });
+
+  const loadingMessage =
+    document.getElementById('loading-message');
+
+  if (loadingMessage) {
+    loadingMessage.textContent =
+      'AI Crew completed your production.';
+  }
+
+  const loadingDescription =
+    document.querySelector('#loading p');
+
+  if (loadingDescription) {
+    loadingDescription.textContent =
+      'Research, script, storyboard, production planning, and quality review are complete.';
+  }
+}
+
+function failCreatorPilotStageSync(failedStage) {
+
+  stopCreatorPilotStageSync();
+
+  const cards = getPipelineStageCards();
+
+  const stageNames = [
+    'research',
+    'script',
+    'storyboard',
+    'production',
+    'quality'
+  ];
+
+  let failedIndex =
+    stageNames.indexOf(
+      String(failedStage || '')
+        .toLowerCase()
+    );
+
+  if (failedIndex < 0) {
+    failedIndex = creatorPilotCurrentStage;
+  }
+
+  cards.forEach((card, index) => {
+
+    const state = card.querySelector('.stage-state');
+
+    card.classList.remove(
+      'active',
+      'waiting',
+      'completed',
+      'failed'
+    );
+
+    if (state) {
+      state.classList.remove(
+        'active',
+        'waiting',
+        'completed',
+        'failed'
+      );
+    }
+
+    if (index < failedIndex) {
+
+      card.classList.add('completed');
+
+      if (state) {
+        state.classList.add('completed');
+        state.textContent = 'Completed';
+      }
+
+    } else if (index === failedIndex) {
+
+      card.classList.add('failed');
+
+      if (state) {
+        state.classList.add('failed');
+        state.textContent = 'Failed';
+      }
+
+    } else {
+
+      card.classList.add('waiting');
+
+      if (state) {
+        state.classList.add('waiting');
+        state.textContent = 'Waiting';
+      }
+    }
+  });
+}
+
+function stopCreatorPilotStageSync() {
+
+  if (creatorPilotStageTimer) {
+    clearInterval(creatorPilotStageTimer);
+    creatorPilotStageTimer = null;
+  }
+}
+
+
+/*
+========================================================
+3. ENTER KEY SUPPORT
+========================================================
+*/
+
+function setupCreatorPilotKeyboardShortcuts() {
+
+  const productionInput =
+    document.getElementById('topic-input');
+
+  const productionButton =
+    document.getElementById('run-btn');
+
+  const crewInput =
+    document.getElementById('continue-chat-input');
+
+  if (productionInput && productionButton) {
+
+    productionInput.addEventListener(
+      'keydown',
+      function(event) {
+
+        if (
+          event.key === 'Enter' &&
+          !event.shiftKey
+        ) {
+
+          event.preventDefault();
+
+          if (!productionButton.disabled) {
+            productionButton.click();
+          }
+        }
+      }
+    );
+  }
+
+  if (crewInput) {
+
+    crewInput.addEventListener(
+      'keydown',
+      function(event) {
+
+        if (
+          event.key === 'Enter' &&
+          !event.shiftKey
+        ) {
+
+          event.preventDefault();
+
+          if (
+            !crewInput.disabled &&
+            typeof sendContinueChat === 'function'
+          ) {
+            sendContinueChat();
+          }
+        }
+      }
+    );
+  }
+}
+
+
+/*
+========================================================
+4. INITIALISE KEYBOARD SHORTCUTS
+========================================================
+*/
+
+if (document.readyState === 'loading') {
+
+  document.addEventListener(
+    'DOMContentLoaded',
+    setupCreatorPilotKeyboardShortcuts
+  );
+
+} else {
+
+  setupCreatorPilotKeyboardShortcuts();
+}
+
+</script>
+
 </body>
 </html>
