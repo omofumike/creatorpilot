@@ -768,6 +768,12 @@
       font-size: 1.1rem;
     }
 
+    .close-btn svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+    }
     .close-btn {
       width: 36px;
       height: 36px;
@@ -1136,6 +1142,235 @@
       }
     }
   </style>
+
+<!-- CREATORPILOT_RESPONSIVE_SCREENPLAY_V1 -->
+<style>
+/* ==========================================
+   RESPONSIVE FULL SCREENPLAY PREVIEW
+   ========================================== */
+
+.screenplay-modal {
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.screenplay-modal-content {
+  width: min(1100px, 100%);
+  height: min(90vh, 1000px);
+  max-height: 90vh;
+  box-sizing: border-box;
+}
+
+.screenplay-preview {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.screenplay-page {
+  box-sizing: border-box;
+  width: min(8.5in, 100%);
+  max-width: 100%;
+  min-height: 100%;
+  margin: 0 auto;
+}
+
+/* ==========================================
+   TABLET
+   ========================================== */
+
+@media (max-width: 900px) {
+
+  .screenplay-modal {
+    padding: 10px;
+  }
+
+  .screenplay-modal-content {
+    width: 100%;
+    height: 92vh;
+    max-height: 92vh;
+    border-radius: 14px;
+  }
+
+  .screenplay-preview {
+    padding: 12px;
+  }
+
+  .screenplay-page {
+    width: 100%;
+    max-width: 100%;
+    padding: 32px;
+  }
+
+  .screenplay-page .action {
+    margin-left: 0.35in;
+    margin-right: 0.35in;
+  }
+
+  .screenplay-page .character {
+    margin-left: 1.8in;
+  }
+
+  .screenplay-page .dialogue {
+    margin-left: 0.8in;
+    margin-right: 0.8in;
+  }
+
+  .screenplay-page .parenthetical {
+    margin-left: 1.2in;
+    margin-right: 1.1in;
+  }
+}
+
+/* ==========================================
+   PHONE
+   ========================================== */
+
+@media (max-width: 600px) {
+
+  .screenplay-modal {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .screenplay-modal-content {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .screenplay-modal-header {
+    flex: 0 0 auto;
+    padding: 12px 14px;
+  }
+
+  .screenplay-modal-header h3 {
+    font-size: 1rem;
+  }
+
+  .close-btn {
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 1.5rem;
+  }
+
+  .screenplay-preview {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 10px;
+  }
+
+  .screenplay-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0 auto;
+    padding: 22px 18px;
+    font-size: 10pt;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .screenplay-page .title-page {
+    min-height: 70vh;
+    padding: 10px;
+  }
+
+  .screenplay-page .title-page h1 {
+    font-size: 15pt;
+    line-height: 1.35;
+    letter-spacing: 0.05em;
+  }
+
+  .screenplay-page .title-page .byline {
+    font-size: 10pt;
+  }
+
+  .screenplay-page .scene-heading {
+    font-size: 10pt;
+  }
+
+  .screenplay-page .action {
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 10pt;
+  }
+
+  .screenplay-page .character {
+    margin-left: 22%;
+    margin-right: 10%;
+    font-size: 10pt;
+  }
+
+  .screenplay-page .dialogue {
+    margin-left: 10%;
+    margin-right: 10%;
+    font-size: 10pt;
+  }
+
+  .screenplay-page .parenthetical {
+    margin-left: 16%;
+    margin-right: 14%;
+    font-size: 9.5pt;
+  }
+
+  .screenplay-page .transition {
+    font-size: 10pt;
+  }
+}
+
+/* ==========================================
+   VERY SMALL PHONES
+   ========================================== */
+
+@media (max-width: 380px) {
+
+  .screenplay-preview {
+    padding: 6px;
+  }
+
+  .screenplay-page {
+    padding: 18px 14px;
+    font-size: 9.5pt;
+  }
+
+  .screenplay-page .title-page h1 {
+    font-size: 13pt;
+  }
+
+  .screenplay-page .action,
+  .screenplay-page .scene-heading,
+  .screenplay-page .transition {
+    font-size: 9.5pt;
+  }
+
+  .screenplay-page .character {
+    margin-left: 18%;
+    margin-right: 8%;
+  }
+
+  .screenplay-page .dialogue {
+    margin-left: 8%;
+    margin-right: 8%;
+  }
+
+  .screenplay-page .parenthetical {
+    margin-left: 13%;
+    margin-right: 11%;
+  }
+}
+</style>
 </head>
 <body>
   <div class="container">
@@ -1408,7 +1643,26 @@
       <div class="screenplay-modal-content">
         <div class="screenplay-modal-header">
           <h3>Screenplay Preview</h3>
-          <button type="button" id="close-screenplay-modal" class="close-btn" aria-label="Close screenplay preview">Ãƒâ€”</button>
+          <button
+  type="button"
+  id="close-screenplay-modal"
+  class="close-btn"
+  aria-label="Close screenplay preview"
+>
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    aria-hidden="true"
+  >
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+</button>
         </div>
         <div id="screenplay-preview" class="screenplay-preview"></div>
       </div>
@@ -1500,48 +1754,30 @@ function saveCurrentProduction() {
 
 function restoreCurrentProduction() {
   try {
-    const saved = localStorage.getItem(
-      CREATORPILOT_STORAGE_KEY
-    );
+    // On refresh, start at the CreatorPilot home screen.
+    // Saved productions remain available in My Productions.
+    currentResult = null;
 
-    if (!saved) {
-      console.log('[CreatorPilot] No saved production found.');
-      return;
-    }
-
-    const parsed = JSON.parse(saved);
-
-    if (!parsed || !parsed.result) {
-      console.warn(
-        '[CreatorPilot] Saved production is invalid.'
-      );
-      return;
-    }
-
-    currentResult = parsed.result;
-
+    // Keep the new-production input empty.
     if (topicInput) {
-      topicInput.value =
-        parsed.topic ||
-        currentResult.topic ||
-        '';
+      topicInput.value = '';
     }
 
-    renderPipelineResults(currentResult);
+    // Show the clean home state.
+    setCrewIdleState();
 
-    resultsContainer.style.display = 'block';
-
-    if (typeof updateCrewAfterResult === 'function') {
-      updateCrewAfterResult(currentResult);
+    // Re-render the saved production selector.
+    if (typeof renderProductionLibrary === 'function') {
+      renderProductionLibrary();
     }
 
     console.log(
-      '[CreatorPilot] Production restored after refresh.'
+      '[CreatorPilot] Home screen restored after refresh. Saved productions remain available.'
     );
 
   } catch (error) {
     console.warn(
-      '[CreatorPilot] Could not restore production:',
+      '[CreatorPilot] Could not restore home screen:',
       error
     );
   }
@@ -1797,7 +2033,7 @@ function restoreCurrentProduction() {
       const agents =
         Array.isArray(data.affectedAgents) &&
         data.affectedAgents.length
-          ? data.affectedAgents.join(' â†’ ')
+          ? data.affectedAgents.join(' • ')
           : 'Production';
 
       chatAgentStatusText.textContent =
@@ -1987,6 +2223,28 @@ function restoreCurrentProduction() {
       }
     });
     crewSendBtn.addEventListener('click', sendContinueChat);
+    // CREATORPILOT_CREW_SUGGESTIONS_V1
+    // Make the quick-action buttons behave exactly like
+    // typing the request and pressing Send.
+
+    document.querySelectorAll('.mini-suggestion').forEach((button) => {
+      button.addEventListener('click', () => {
+        const suggestion = button.textContent.trim();
+
+        if (!suggestion) {
+          return;
+        }
+
+        if (!currentResult || !currentResult.finalPackage) {
+          console.warn('[AI Crew] No production available for suggestion.');
+          return;
+        }
+
+        crewChatInput.value = suggestion;
+        sendContinueChat();
+      });
+    });
+
     crewChatInput.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         sendContinueChat();
@@ -2446,6 +2704,11 @@ function stopLoadingMessageRotation() {
         '<select id="creatorpilot-production-selector" ' +
         'style="flex:1;min-width:240px;' +
         'padding:10px;border-radius:10px;">';
+
+      html +=
+        '<option value="" disabled' +
+        (!currentResult ? ' selected' : '') +
+        '>Select a production</option>';
 
       productions.forEach(
         production => {
@@ -3245,6 +3508,18 @@ if (document.readyState === 'loading') {
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
