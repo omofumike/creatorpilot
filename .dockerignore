@@ -1,0 +1,6 @@
+﻿.git
+.git/**
+*.bak
+*.backup
+*.bak2
+*.bak3
