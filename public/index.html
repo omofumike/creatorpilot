@@ -1370,6 +1370,295 @@
     margin-right: 11%;
   }
 }
+
+/* =========================================================
+   CREATORPILOT RESPONSIVE WORKSPACE V2
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.container {
+  width: min(1220px, calc(100% - 32px));
+  max-width: 1220px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-workspace,
+.results-container,
+.pipeline-summary,
+.summary-left,
+.tabs-header,
+.tab-panel,
+.content-box {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.results-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.pipeline-summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.summary-left {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#display-topic {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.tabs-header {
+  width: 100%;
+  min-width: 0;
+}
+
+.tab-btn {
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: normal;
+}
+
+.tab-panel {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.content-box {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+#tab-production .content-box:first-child {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+#tab-production .content-box:first-child > table {
+  width: 100%;
+  min-width: 1050px;
+  table-layout: fixed;
+}
+
+#tab-production .content-box:first-child th,
+#tab-production .content-box:first-child td {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  vertical-align: top;
+}
+
+#tab-production .content-box:first-child td {
+  line-height: 1.45;
+}
+
+.storyboard-grid {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.storyboard-grid > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 1000px) {
+  .container {
+    width: min(100%, calc(100% - 24px));
+  }
+
+  .main-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .production-status-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pipeline-summary {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tabs-header {
+    gap: 0.45rem;
+  }
+
+  .tab-btn {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    width: calc(100% - 20px);
+    max-width: none;
+  }
+
+  header {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .logo-container {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .status-badge {
+    width: auto;
+    margin-top: 0;
+    flex: 0 0 auto;
+  }
+
+  .create-production-card,
+  .results-container {
+    border-radius: 14px;
+    padding: 1rem;
+  }
+
+  .create-production-card h2 {
+    font-size: 1.25rem;
+    line-height: 1.35;
+  }
+
+  .production-status-grid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .pipeline-summary {
+    gap: 0.8rem;
+  }
+
+  #display-topic {
+    font-size: 1.25rem;
+    line-height: 1.35;
+  }
+
+  .tabs-header {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .tab-btn {
+    width: 100%;
+    min-width: 0;
+    padding: 0.65rem 0.55rem;
+    font-size: 0.78rem;
+  }
+
+  .tab-panel {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .content-box {
+    padding: 0.8rem;
+  }
+
+  .content-box h3 {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  #tab-production .content-box:first-child {
+    padding: 0.65rem;
+    overflow-x: auto;
+  }
+
+  #tab-production .content-box:first-child > table {
+    min-width: 900px;
+  }
+
+  button,
+  .secondary-btn {
+    max-width: 100%;
+  }
+
+  .chat-message {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .chat-composer {
+    min-width: 0;
+  }
+
+  .chat-composer input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .suggestion-row {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .container {
+    width: calc(100% - 14px);
+  }
+
+  .create-production-card,
+  .results-container {
+    padding: 0.75rem;
+  }
+
+  .tabs-header {
+    grid-template-columns: 1fr;
+  }
+
+  .tab-btn {
+    font-size: 0.8rem;
+  }
+
+  .tab-panel {
+    padding: 0.55rem;
+  }
+
+  .content-box {
+    padding: 0.7rem;
+  }
+
+  #display-topic {
+    font-size: 1.1rem;
+  }
+
+  #tab-production .content-box:first-child > table {
+    min-width: 850px;
+  }
+}
 </style>
 </head>
 <body>
@@ -1567,15 +1856,34 @@
       <!-- Panel: Storyboard -->
       <div id="tab-storyboard" class="tab-panel">
         <div class="content-box">
-          <h3 id="storyboard-title" style="margin-bottom: 1rem;">Video Visual Storyboard</h3>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+  <h3 id="storyboard-title" style="margin:0;">Video Visual Storyboard</h3>
+  <div class="export-actions">
+    <button type="button" class="secondary-btn" onclick="downloadStoryboardWord()">Download Word</button>
+    <button type="button" class="secondary-btn" onclick="downloadStoryboardPDF()">Download PDF</button>
+  </div>
+</div>
           <div class="storyboard-grid" id="storyboard-grid-list"></div>
         </div>
       </div>
 
       <!-- Panel: Production Plan -->
       <div id="tab-production" class="tab-panel">
+        <div id="production-download-actions" style="
+  display:flex;
+  flex-wrap:wrap;
+  gap:.6rem;
+  margin-bottom:1rem;
+">
+  <button type="button" class="tab-btn" onclick="downloadProductionPlanWord()">
+    Download Production Plan Word
+  </button>
+  <button type="button" class="tab-btn" onclick="downloadProductionPlanPDF()">
+    Download Production Plan PDF
+  </button>
+</div>
         <div class="content-box">
-          <h3>Creator Logistical Shot List</h3>
+          <h3 id="production-plan-title">Cinematic Production Shot List</h3>
           <table>
             <thead>
               <tr>
@@ -1584,7 +1892,7 @@
                 <th style="width: 15%">Shot Type</th>
                 <th style="width: 15%">Location</th>
                 <th style="width: 24%">Action Description</th>
-                <th style="width: 30%">Solo Setup Instructions</th>
+                <th style="width: 30%">Production & Blocking Notes</th>
               </tr>
             </thead>
             <tbody id="production-shot-table-body"></tbody>
@@ -1592,7 +1900,7 @@
         </div>
 
         <div class="content-box">
-          <h3>Solo-Creator Filming Checklist Tasks</h3>
+          <h3 id="production-checklist-title">Production Checklist</h3>
           <div class="task-list" id="production-checklist-tasks"></div>
         </div>
       </div>
@@ -1831,7 +2139,80 @@ function restoreCurrentProduction() {
     function buildScreenplayHTML(result) {
       if (!result || !result.finalPackage || !result.finalPackage.script) return '<p>No screenplay data available.</p>';
       const script = result.finalPackage.script;
-      const sections = script.sections || [];
+      const sections = Array.isArray(script.sections)
+  ? script.sections
+  : Array.isArray(script.scenes)
+    ? script.scenes.flatMap((scene, index) => {
+        const normalized = [];
+
+        normalized.push({
+          heading: scene.slugline || `SCENE ${scene.sceneNumber || index + 1}`
+        });
+
+        if (scene.location || scene.timeOfDay) {
+          normalized.push({
+            narration: [
+              scene.location ? `Location: ${scene.location}` : '',
+              scene.timeOfDay ? `Time: ${scene.timeOfDay}` : ''
+            ].filter(Boolean).join('\n')
+          });
+        }
+
+        if (scene.action) {
+          normalized.push({
+            narration: Array.isArray(scene.action)
+              ? scene.action.join('\n')
+              : scene.action
+          });
+        }
+
+        if (Array.isArray(scene.charactersPresent) && scene.charactersPresent.length) {
+          normalized.push({
+            narration: `Characters: ${scene.charactersPresent.join(', ')}`
+          });
+        }
+
+        if (Array.isArray(scene.dialogue)) {
+          scene.dialogue.forEach(line => {
+            if (!line || typeof line !== 'object') return;
+
+            normalized.push({
+              character: line.character || line.speaker || line.name || '',
+              parenthetical: line.parenthetical || line.direction || '',
+              dialogue: line.line || line.dialogue || line.text || ''
+            });
+          });
+        }
+
+        if (scene.sound) {
+          normalized.push({
+            narration: `SOUND: ${
+              Array.isArray(scene.sound)
+                ? scene.sound.join('; ')
+                : scene.sound
+            }`
+          });
+        }
+
+        if (scene.music) {
+          normalized.push({
+            narration: `MUSIC: ${
+              Array.isArray(scene.music)
+                ? scene.music.join('; ')
+                : scene.music
+            }`
+          });
+        }
+
+        if (scene.endingTransition) {
+          normalized.push({
+            narration: scene.endingTransition
+          });
+        }
+
+        return normalized;
+      })
+    : [];
 
       let html = '<div class="screenplay-page">';
 
@@ -2083,6 +2464,42 @@ function restoreCurrentProduction() {
     // WORD SCREENPLAY EXPORT
     // =========================================
 
+    function getExportPackage() {
+      if (!currentResult) {
+        return null;
+      }
+
+      // Normal API response structure
+      if (
+        currentResult.finalPackage &&
+        typeof currentResult.finalPackage === 'object'
+      ) {
+        return currentResult.finalPackage;
+      }
+
+      // Fallback if the package itself is stored at the top level
+      if (
+        currentResult.script &&
+        typeof currentResult.script === 'object'
+      ) {
+        return {
+          topic: currentResult.topic || topicInput?.value || 'Current production',
+          researchBrief: currentResult.researchBrief,
+          script: currentResult.script,
+          storyboard: currentResult.storyboard,
+          productionPlan: currentResult.productionPlan,
+          qualityReport: currentResult.qualityReport,
+          productionType: currentResult.productionType
+        };
+      }
+
+      console.error(
+        '[CreatorPilot] No export package found in currentResult:',
+        currentResult
+      );
+
+      return null;
+    }
     async function downloadScreenplayWord() {
       if (!currentResult) {
         alert('No production to download.');
@@ -2090,6 +2507,18 @@ function restoreCurrentProduction() {
       }
 
       try {
+        const exportPackage = getExportPackage();
+
+        if (!exportPackage) {
+          alert('No screenplay package is available to export.');
+          return;
+        }
+
+        console.log(
+          '[CreatorPilot] Word export package:',
+          exportPackage
+        );
+
         const response = await fetch('/api/export-docx', {
           method: 'POST',
           headers: {
@@ -2099,8 +2528,9 @@ function restoreCurrentProduction() {
             topic:
               currentResult.topic ||
               topicInput.value ||
+              exportPackage.topic ||
               'Current production',
-            finalPackage: currentResult.finalPackage
+            finalPackage: exportPackage
           })
         });
 
@@ -2154,35 +2584,76 @@ function restoreCurrentProduction() {
       }
 
       try {
+        const exportPackage = getExportPackage();
+
+        if (!exportPackage) {
+          alert('No screenplay package is available to export.');
+          return;
+        }
+
+        console.log(
+          '[CreatorPilot] PDF export package:',
+          exportPackage
+        );
+
         const response = await fetch('/api/export-pdf', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({
-            finalPackage: currentResult.finalPackage,
-            topic: currentResult.topic || topicInput.value || 'creatorpilot_production'
+            finalPackage: exportPackage,
+            topic:
+              currentResult.topic ||
+              topicInput.value ||
+              exportPackage.topic ||
+              'creatorpilot_production'
           })
         });
 
         if (!response.ok) {
-          const data = await response.json().catch(() => ({}));
-          throw new Error(data.error || 'Download PDF failed.');
+          const data =
+            await response.json().catch(() => ({}));
+
+          throw new Error(
+            data.error ||
+            'Download PDF failed.'
+          );
         }
 
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
+
         link.href = url;
-        link.download = `${(currentResult.topic || topicInput.value || 'creatorpilot_production').replace(/[^a-z0-9]/gi, '_').toLowerCase()}_screenplay.pdf`;
+
+        link.download =
+          `${(
+            currentResult.topic ||
+            topicInput.value ||
+            'creatorpilot_production'
+          )
+            .replace(/[^a-z0-9]/gi, '_')
+            .toLowerCase()}_screenplay.pdf`;
+
         document.body.appendChild(link);
         link.click();
         link.remove();
+
         URL.revokeObjectURL(url);
+
       } catch (error) {
-        console.error("PDF Export Error:", error);
-        alert(error.message || 'The PDF export failed.');
+        console.error(
+          'PDF Export Error:',
+          error
+        );
+
+        alert(
+          error.message ||
+          'The PDF export failed.'
+        );
       }
     }
-
     function viewScreenplay() {
       if (!currentResult) {
         alert('No screenplay to view.');
@@ -2902,71 +3373,264 @@ function stopLoadingMessageRotation() {
 
       // 3. Render Script Tab
       const script = pkg.script || {};
-      document.getElementById('script-format').textContent = script.format || 'Educational Video';
-      document.getElementById('script-audience').textContent = script.audience || 'Solo Creators';
-      document.getElementById('script-tone').textContent = script.tone || 'Informative';
-      document.getElementById('script-duration').textContent = script.targetDuration || '5-7 mins';
-      document.getElementById('script-hook').textContent = script.hook || 'No opening hook returned.';
+      const isShortFilm = (pkg.productionType || script.productionType || effectiveResult.productionType) === 'short_film';
 
+      const scriptFormat = document.getElementById('script-format');
+      const scriptAudience = document.getElementById('script-audience');
+      const scriptTone = document.getElementById('script-tone');
+      const scriptDuration = document.getElementById('script-duration');
+      const scriptHook = document.getElementById('script-hook');
       const sectionsList = document.getElementById('script-sections-list');
+
       sectionsList.innerHTML = '';
-      const sections = script.sections || [];
-      if (sections.length > 0) {
-        sections.forEach(s => {
-          const card = document.createElement('div');
-          card.className = 'content-box'; // Using general content-box for sections
 
-          const header = document.createElement('h3');
-          header.textContent = s.heading || 'Untitled Section';
-          card.appendChild(header);
+      if (isShortFilm) {
+        scriptFormat.textContent = script.genre || 'Drama';
+        scriptAudience.textContent = `${Array.isArray(script.characters) ? script.characters.length : 0} Characters`;
+        scriptTone.textContent = script.title || 'Short Film';
+        scriptDuration.textContent = script.targetDuration || '5-7 mins';
+        scriptHook.textContent = script.logline || 'No logline returned.';
 
-          if (s.character) {
+        if (Array.isArray(script.characters) && script.characters.length > 0) {
+          const charactersCard = document.createElement('div');
+          charactersCard.className = 'content-box';
+
+          const charactersHeader = document.createElement('h3');
+          charactersHeader.textContent = 'Characters';
+          charactersCard.appendChild(charactersHeader);
+
+          script.characters.forEach(character => {
+            const characterPara = document.createElement('p');
+            characterPara.innerHTML = `<strong>${escapeHtml(character.name || 'Unnamed Character')}</strong>: ${escapeHtml(character.description || '')}`;
+            charactersCard.appendChild(characterPara);
+          });
+
+          sectionsList.appendChild(charactersCard);
+        }
+
+        if (Array.isArray(script.scenes) && script.scenes.length > 0) {
+          script.scenes.forEach(scene => {
+            const card = document.createElement('div');
+            card.className = 'content-box';
+
+            const header = document.createElement('h3');
+            header.textContent = `Scene ${scene.sceneNumber || ''} • ${scene.slugline || 'Untitled Scene'}`;
+            card.appendChild(header);
+
+            if (scene.location) {
+              const location = document.createElement('p');
+              location.innerHTML = `<strong>Location:</strong> ${escapeHtml(scene.location)}`;
+              card.appendChild(location);
+            }
+
+            if (scene.timeOfDay) {
+              const time = document.createElement('p');
+              time.innerHTML = `<strong>Time:</strong> ${escapeHtml(scene.timeOfDay)}`;
+              card.appendChild(time);
+            }
+
+            if (scene.action) {
+              const action = document.createElement('p');
+              action.innerHTML = `<strong>Action:</strong> ${escapeHtml(scene.action)}`;
+              card.appendChild(action);
+            }
+
+            if (Array.isArray(scene.dialogue) && scene.dialogue.length > 0) {
+              const dialogueTitle = document.createElement('p');
+              dialogueTitle.innerHTML = '<strong>Dialogue:</strong>';
+              card.appendChild(dialogueTitle);
+
+              scene.dialogue.forEach(line => {
+                const dialogue = document.createElement('p');
+                dialogue.innerHTML = `<strong>${escapeHtml(line.character || 'Character')}</strong>${line.parenthetical ? ` <em>${escapeHtml(line.parenthetical)}</em>` : ''}: ${escapeHtml(line.line || '')}`;
+                card.appendChild(dialogue);
+              });
+            }
+
+            if (scene.sound) {
+              const sound = document.createElement('p');
+              sound.innerHTML = `<strong>Sound:</strong> ${escapeHtml(scene.sound)}`;
+              card.appendChild(sound);
+            }
+
+            if (scene.music) {
+              const music = document.createElement('p');
+              music.innerHTML = `<strong>Music:</strong> ${escapeHtml(scene.music)}`;
+              card.appendChild(music);
+            }
+
+            if (scene.endingTransition) {
+              const transition = document.createElement('p');
+              transition.innerHTML = `<strong>Transition:</strong> ${escapeHtml(scene.endingTransition)}`;
+              card.appendChild(transition);
+            }
+
+            sectionsList.appendChild(card);
+          });
+        } else {
+          sectionsList.innerHTML = '<p>No screenplay scenes returned.</p>';
+        }
+
+        if (script.ending) {
+          const endingCard = document.createElement('div');
+          endingCard.className = 'content-box';
+
+          const endingHeader = document.createElement('h3');
+          endingHeader.textContent = 'Ending';
+          endingCard.appendChild(endingHeader);
+
+          const endingText = document.createElement('p');
+          endingText.textContent = script.ending;
+          endingCard.appendChild(endingText);
+
+          sectionsList.appendChild(endingCard);
+        }
+      } else {
+        scriptFormat.textContent = script.format || 'Educational Video';
+        scriptAudience.textContent = script.audience || 'Solo Creators';
+        scriptTone.textContent = script.tone || 'Informative';
+        scriptDuration.textContent = script.targetDuration || '5-7 mins';
+        scriptHook.textContent = script.hook || 'No opening hook returned.';
+
+        const sections = Array.isArray(script.sections)
+  ? script.sections
+  : Array.isArray(script.scenes)
+    ? script.scenes.flatMap((scene, index) => {
+        const normalized = [];
+
+        normalized.push({
+          heading: scene.slugline || `SCENE ${scene.sceneNumber || index + 1}`
+        });
+
+        if (scene.location || scene.timeOfDay) {
+          normalized.push({
+            narration: [
+              scene.location ? `Location: ${scene.location}` : '',
+              scene.timeOfDay ? `Time: ${scene.timeOfDay}` : ''
+            ].filter(Boolean).join('\n')
+          });
+        }
+
+        if (scene.action) {
+          normalized.push({
+            narration: Array.isArray(scene.action)
+              ? scene.action.join('\n')
+              : scene.action
+          });
+        }
+
+        if (Array.isArray(scene.charactersPresent) && scene.charactersPresent.length) {
+          normalized.push({
+            narration: `Characters: ${scene.charactersPresent.join(', ')}`
+          });
+        }
+
+        if (Array.isArray(scene.dialogue)) {
+          scene.dialogue.forEach(line => {
+            if (!line || typeof line !== 'object') return;
+
+            normalized.push({
+              character: line.character || line.speaker || line.name || '',
+              parenthetical: line.parenthetical || line.direction || '',
+              dialogue: line.line || line.dialogue || line.text || ''
+            });
+          });
+        }
+
+        if (scene.sound) {
+          normalized.push({
+            narration: `SOUND: ${
+              Array.isArray(scene.sound)
+                ? scene.sound.join('; ')
+                : scene.sound
+            }`
+          });
+        }
+
+        if (scene.music) {
+          normalized.push({
+            narration: `MUSIC: ${
+              Array.isArray(scene.music)
+                ? scene.music.join('; ')
+                : scene.music
+            }`
+          });
+        }
+
+        if (scene.endingTransition) {
+          normalized.push({
+            narration: scene.endingTransition
+          });
+        }
+
+        return normalized;
+      })
+    : [];
+
+        if (sections.length > 0) {
+          sections.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'content-box';
+
+            const header = document.createElement('h3');
+            header.textContent = s.heading || 'Untitled Section';
+            card.appendChild(header);
+
+            if (s.character) {
               const characterDiv = document.createElement('p');
               characterDiv.innerHTML = `<strong>${escapeHtml(s.character)}:</strong>`;
               if (s.parenthetical) {
-                  characterDiv.innerHTML += ` <em>(${escapeHtml(s.parenthetical)})</em>`;
+                characterDiv.innerHTML += ` <em>(${escapeHtml(s.parenthetical)})</em>`;
               }
               if (s.dialogue) {
-                  characterDiv.innerHTML += ` ${escapeHtml(s.dialogue)}`;
+                characterDiv.innerHTML += ` ${escapeHtml(s.dialogue)}`;
               }
               card.appendChild(characterDiv);
-          } else if (s.narration) {
+            } else if (s.narration) {
               const narrationPara = document.createElement('p');
               narrationPara.textContent = s.narration;
               card.appendChild(narrationPara);
-          }
+            }
 
-          if (s.visualSuggestions && Array.isArray(s.visualSuggestions) && s.visualSuggestions.length > 0) {
-            const visualTitle = document.createElement('p');
-            visualTitle.innerHTML = '<strong>Visual Cues:</strong>';
-            card.appendChild(visualTitle);
-            const visualList = document.createElement('ul');
-            visualList.className = 'list-styled';
-            s.visualSuggestions.forEach(v => {
-              const li = document.createElement('li');
-              li.textContent = v;
-              visualList.appendChild(li);
-            });
-            card.appendChild(visualList);
-          }
-          if (s.onScreenText && Array.isArray(s.onScreenText) && s.onScreenText.length > 0) {
-            const onScreenTitle = document.createElement('p');
-            onScreenTitle.innerHTML = '<strong>On-Screen Text:</strong>';
-            card.appendChild(onScreenTitle);
-            const onScreenList = document.createElement('ul');
-            onScreenList.className = 'list-styled';
-            s.onScreenText.forEach(t => {
-              const li = document.createElement('li');
-              li.textContent = t;
-              onScreenList.appendChild(li);
-            });
-            card.appendChild(onScreenList);
-          }
+            if (s.visualSuggestions && Array.isArray(s.visualSuggestions) && s.visualSuggestions.length > 0) {
+              const visualTitle = document.createElement('p');
+              visualTitle.innerHTML = '<strong>Visual Cues:</strong>';
+              card.appendChild(visualTitle);
 
-          sectionsList.appendChild(card);
-        });
-      } else {
-        sectionsList.innerHTML = '<p>No script sections returned.</p>';
+              const visualList = document.createElement('ul');
+              visualList.className = 'list-styled';
+
+              s.visualSuggestions.forEach(v => {
+                const li = document.createElement('li');
+                li.textContent = v;
+                visualList.appendChild(li);
+              });
+
+              card.appendChild(visualList);
+            }
+
+            if (s.onScreenText && Array.isArray(s.onScreenText) && s.onScreenText.length > 0) {
+              const onScreenTitle = document.createElement('p');
+              onScreenTitle.innerHTML = '<strong>On-Screen Text:</strong>';
+              card.appendChild(onScreenTitle);
+
+              const onScreenList = document.createElement('ul');
+              onScreenList.className = 'list-styled';
+
+              s.onScreenText.forEach(t => {
+                const li = document.createElement('li');
+                li.textContent = t;
+                onScreenList.appendChild(li);
+              });
+
+              card.appendChild(onScreenList);
+            }
+
+            sectionsList.appendChild(card);
+          });
+        } else {
+          sectionsList.innerHTML = '<p>No script sections returned.</p>';
+        }
       }
 
       // 4. Render Storyboard Tab
@@ -3036,48 +3700,384 @@ function stopLoadingMessageRotation() {
         });
       } else {
         storyboardGrid.innerHTML = '<p>No storyboard shots returned.</p>';
-      }
-
+      }      
       // 5. Render Production Plan Tab
       const prod = pkg.productionPlan || {};
-      const tableBody = document.getElementById('production-shot-table-body');
+      const tableBody =
+        document.getElementById('production-shot-table-body');
+
+      const productionTitle =
+        document.getElementById('production-plan-title');
+
+      const checklistTitle =
+        document.getElementById('production-checklist-title');
+
+      const productionTable =
+        tableBody ? tableBody.closest('table') : null;
+
+      const productionTableHead =
+        productionTable
+          ? productionTable.querySelector('thead')
+          : null;
+
       tableBody.innerHTML = '';
-      const prodShots = prod.shotList || [];
-      if (prodShots.length > 0) {
-        prodShots.forEach(ps => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td style="font-weight: bold; color: var(--accent);">#${ps.shotNumber}</td>
-            <td style="font-weight: bold; color: var(--accent);">Story #${ps.storyboardShotNumber}</td>
-            <td><span class="task-tag" style="background-color: var(--accent-soft); color: #a5b4fc; border-color: var(--accent);">${escapeHtml(ps.shotType)}</span></td>
-            <td style="color: var(--subtitle);">${escapeHtml(ps.location || 'Studio')}</td>
-            <td style="font-size: 0.85rem;">${escapeHtml(ps.description)}</td>
-            <td style="font-size: 0.85rem; color: var(--subtitle); font-style: italic;">${escapeHtml(ps.setupInstructions || 'Standard capture.')}</td>
+
+      const prodShots = Array.isArray(prod.shotList)
+        ? prod.shotList
+        : [];
+
+      if (isShortFilm) {
+
+        // -----------------------------------------
+        // SHORT FILM PRODUCTION PLAN
+        // -----------------------------------------
+
+        if (productionTitle) {
+          productionTitle.textContent =
+            'Short Film Production Shot List';
+        }
+
+        if (checklistTitle) {
+          checklistTitle.textContent =
+            'Filming Schedule';
+        }
+
+        // Change table headings for short-film production
+        if (productionTableHead) {
+          productionTableHead.innerHTML = `
+            <tr>
+              <th>Shot #</th>
+              <th>Scene #</th>
+              <th>Storyboard #</th>
+              <th>Slugline</th>
+              <th>Camera Setup</th>
+              <th>Lighting</th>
+              <th>Audio / Voice-over</th>
+              <th>Blocking</th>
+            </tr>
           `;
-          tableBody.appendChild(row);
-        });
+        }
+
+        if (prodShots.length > 0) {
+
+          prodShots.forEach(ps => {
+
+            const row =
+              document.createElement('tr');
+
+            const voiceover =
+              ps.voiceover &&
+              ps.voiceover !== 'None' &&
+              ps.voiceover !== 'N/A'
+                ? ps.voiceover
+                : '';
+
+            const audio =
+              ps.audioSetup ||
+              'No audio setup specified.';
+
+            const audioVoiceover =
+              voiceover
+                ? `<strong>Audio:</strong> ${escapeHtml(audio)}
+                   <br><br>
+                   <strong>Voice-over:</strong> ${escapeHtml(voiceover)}`
+                : `<strong>Audio:</strong> ${escapeHtml(audio)}`;
+
+            row.innerHTML = `
+              <td style="font-weight:bold;color:var(--accent);">
+                #${ps.shotNumber ?? '—'}
+              </td>
+
+              <td>
+                Scene #${ps.sceneNumber ?? '—'}
+              </td>
+
+              <td>
+                Storyboard #${ps.storyboardShotNumber ?? '—'}
+              </td>
+
+              <td style="min-width:220px;">
+                ${escapeHtml(ps.slugline || 'N/A')}
+              </td>
+
+              <td style="min-width:220px;font-size:.85rem;">
+                ${escapeHtml(ps.cameraSetup || 'N/A')}
+              </td>
+
+              <td style="min-width:200px;font-size:.85rem;">
+                ${escapeHtml(ps.lightingSetup || 'N/A')}
+              </td>
+
+              <td style="min-width:280px;font-size:.85rem;">
+                ${audioVoiceover}
+              </td>
+
+              <td style="min-width:220px;font-size:.85rem;">
+                ${escapeHtml(ps.blocking || 'N/A')}
+              </td>
+            `;
+
+            tableBody.appendChild(row);
+          });
+
+        } else {
+
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="8"
+                  style="text-align:center;color:var(--muted);">
+                No short-film production shots returned.
+              </td>
+            </tr>
+          `;
+        }
+
+        // -----------------------------------------
+        // SHORT FILM FILMING SCHEDULE
+        // -----------------------------------------
+
+        const checklistContainer =
+          document.getElementById(
+            'production-checklist-tasks'
+          );
+
+        checklistContainer.innerHTML = '';
+
+        const filmingSchedule =
+          Array.isArray(prod.filmingSchedule)
+            ? prod.filmingSchedule
+            : [];
+
+        if (filmingSchedule.length > 0) {
+
+          filmingSchedule.forEach(item => {
+
+            const card =
+              document.createElement('div');
+
+            card.className = 'task-item';
+
+            const actors =
+              Array.isArray(item.actorsPresent)
+                ? item.actorsPresent.join(', ')
+                : '';
+
+            card.innerHTML = `
+              <div style="width:100%;">
+
+                <div style="
+                  font-weight:bold;
+                  color:var(--accent);
+                  margin-bottom:.35rem;
+                ">
+                  Scene #${item.sceneNumber ?? '—'}
+                </div>
+
+                <div style="
+                  font-weight:600;
+                  margin-bottom:.35rem;
+                ">
+                  ${escapeHtml(item.slugline || 'N/A')}
+                </div>
+
+                <div style="
+                  color:var(--subtitle);
+                  font-size:.85rem;
+                  line-height:1.6;
+                ">
+
+                  <strong>Shoot Time:</strong>
+                  ${escapeHtml(
+                    item.estimatedShootTime || 'N/A'
+                  )}
+
+                  <br>
+
+                  <strong>Location:</strong>
+                  ${escapeHtml(
+                    item.location || 'N/A'
+                  )}
+
+                  <br>
+
+                  <strong>Actors:</strong>
+                  ${escapeHtml(
+                    actors || 'N/A'
+                  )}
+
+                  ${
+                    item.notes
+                      ? `<br><strong>Notes:</strong>
+                         ${escapeHtml(item.notes)}`
+                      : ''
+                  }
+
+                </div>
+
+              </div>
+            `;
+
+            checklistContainer.appendChild(card);
+          });
+
+        } else {
+
+          checklistContainer.innerHTML = `
+            <p style="color:var(--muted);">
+              No filming schedule returned.
+            </p>
+          `;
+        }
+
       } else {
-        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--muted);">No production plan shots returned.</td></tr>';
+
+        // -----------------------------------------
+        // CREATOR VIDEO PRODUCTION PLAN
+        // -----------------------------------------
+
+        if (productionTitle) {
+          productionTitle.textContent =
+            'Cinematic Production Shot List';
+        }
+
+        if (checklistTitle) {
+          checklistTitle.textContent =
+            'Production Checklist';
+        }
+
+        if (productionTableHead) {
+          productionTableHead.innerHTML = `
+            <tr>
+              <th style="width:8%">Shot #</th>
+              <th style="width:8%">Story #</th>
+              <th style="width:15%">Shot Type</th>
+              <th style="width:15%">Location</th>
+              <th style="width:24%">Action Description</th>
+              <th style="width:30%">Production & Blocking Notes</th>
+            </tr>
+          `;
+        }
+
+        if (prodShots.length > 0) {
+
+          prodShots.forEach(ps => {
+
+            const row =
+              document.createElement('tr');
+
+            row.innerHTML = `
+              <td style="font-weight:bold;color:var(--accent);">
+                #${ps.shotNumber}
+              </td>
+
+              <td style="font-weight:bold;color:var(--accent);">
+                Story #${ps.storyboardShotNumber}
+              </td>
+
+              <td>
+                <span class="task-tag"
+                      style="
+                        background-color:var(--accent-soft);
+                        color:#a5b4fc;
+                        border-color:var(--accent);
+                      ">
+                  ${escapeHtml(ps.shotType)}
+                </span>
+              </td>
+
+              <td style="color:var(--subtitle);">
+                ${escapeHtml(ps.location || 'Studio')}
+              </td>
+
+              <td style="font-size:.85rem;">
+                ${escapeHtml(ps.description)}
+              </td>
+
+              <td style="
+                    font-size:.85rem;
+                    color:var(--subtitle);
+                    font-style:italic;
+                  ">
+                ${escapeHtml(
+                  ps.setupInstructions ||
+                  'Standard capture.'
+                )}
+              </td>
+            `;
+
+            tableBody.appendChild(row);
+          });
+
+        } else {
+
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="6"
+                  style="text-align:center;color:var(--muted);">
+                No production plan shots returned.
+              </td>
+            </tr>
+          `;
+        }
+
+        const checklistContainer =
+          document.getElementById(
+            'production-checklist-tasks'
+          );
+
+        checklistContainer.innerHTML = '';
+
+        const checklist =
+          prod.filmingChecklist ||
+          prod.checklist ||
+          [];
+
+        if (checklist.length > 0) {
+
+          checklist.forEach(task => {
+
+            const tcard =
+              document.createElement('div');
+
+            tcard.className = 'task-item';
+
+            tcard.innerHTML = `
+              <input type="checkbox"
+                     class="task-checkbox"
+                     ${task.completed ? 'checked' : ''} />
+
+              <span class="task-tag">
+                ${escapeHtml(
+                  task.stage || 'Production'
+                )}
+              </span>
+
+              <span style="
+                color:var(--subtitle);
+                font-size:.9rem;
+                flex:1;
+              ">
+                ${escapeHtml(
+                  task.task ||
+                  task.description ||
+                  ''
+                )}
+              </span>
+            `;
+
+            checklistContainer.appendChild(tcard);
+          });
+
+        } else {
+
+          checklistContainer.innerHTML = `
+            <p style="color:var(--muted);">
+              No logistical tasks returned.
+            </p>
+          `;
+        }
       }
 
-      const checklistContainer = document.getElementById('production-checklist-tasks');
-      checklistContainer.innerHTML = '';
-      const checklist = prod.filmingChecklist || prod.checklist || [];
-      if (checklist.length > 0) {
-        checklist.forEach(task => {
-          const tcard = document.createElement('div');
-          tcard.className = 'task-item';
-
-          tcard.innerHTML = `
-            <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} />
-            <span class="task-tag">${escapeHtml(task.stage || 'Production')}</span>
-            <span style="color: var(--subtitle); font-size: 0.9rem; flex: 1;">${escapeHtml(task.task || task.description)}</span>
-          `;
-          checklistContainer.appendChild(tcard);
-        });
-      } else {
-        checklistContainer.innerHTML = '<p style="color: var(--muted);">No logistical tasks returned.</p>';
-      }
 
       // 6. Render Quality Tab
       const report = pkg.qualityReport || {};
@@ -3548,8 +4548,274 @@ if (document.readyState === 'loading') {
 
 </script>
 
+<script>
+async function downloadStoryboardWord() {
+  if (!currentResult) {
+    alert('No production to download.');
+    return;
+  }
+
+  try {
+    const pkg = currentResult.finalPackage || currentResult;
+
+    const response = await fetch('/api/export-storyboard-docx', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        finalPackage: {
+          topic: currentResult.topic,
+          storyboard: pkg.storyboard || {}
+        },
+        topic:
+          pkg.storyboard?.title ||
+          currentResult.topic ||
+          'CreatorPilot Storyboard'
+      })
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(
+        data.error || 'Storyboard Word export failed.'
+      );
+    }
+
+    const blob = await response.blob();
+    const title =
+      pkg.storyboard?.title ||
+      currentResult.topic ||
+      'creatorpilot_storyboard';
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download =
+      title.replace(/[^a-z0-9]/gi, '_').toLowerCase() +
+      '_storyboard.docx';
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error('Storyboard Word Export Error:', error);
+    alert(
+      error.message ||
+      'The Storyboard Word export failed.'
+    );
+  }
+}
+
+
+async function downloadStoryboardPDF() {
+  if (!currentResult) {
+    alert('No production to download.');
+    return;
+  }
+
+  try {
+    const pkg = currentResult.finalPackage || currentResult;
+
+    const response = await fetch('/api/export-storyboard-pdf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        finalPackage: {
+          topic: currentResult.topic,
+          storyboard: pkg.storyboard || {}
+        },
+        topic:
+          pkg.storyboard?.title ||
+          currentResult.topic ||
+          'CreatorPilot Storyboard'
+      })
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(
+        data.error || 'Storyboard PDF export failed.'
+      );
+    }
+
+    const blob = await response.blob();
+    const title =
+      pkg.storyboard?.title ||
+      currentResult.topic ||
+      'creatorpilot_storyboard';
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download =
+      title.replace(/[^a-z0-9]/gi, '_').toLowerCase() +
+      '_storyboard.pdf';
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error('Storyboard PDF Export Error:', error);
+    alert(
+      error.message ||
+      'The Storyboard PDF export failed.'
+    );
+  }
+}
+
+async function downloadProductionPlanWord() {
+  if (!currentResult) {
+    alert('No production to download.');
+    return;
+  }
+
+  try {
+    const pkg = currentResult.finalPackage || currentResult;
+
+    const response = await fetch('/api/export-production-plan-docx', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        finalPackage: {
+          topic: currentResult.topic,
+          productionPlan: pkg.productionPlan || {}
+        },
+        topic:
+          pkg.productionPlan?.title ||
+          currentResult.topic ||
+          'CreatorPilot Production Plan'
+      })
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(
+        data.error || 'Production Plan Word export failed.'
+      );
+    }
+
+    const blob = await response.blob();
+    const title =
+      pkg.productionPlan?.title ||
+      currentResult.topic ||
+      'creatorpilot_production_plan';
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download =
+      title.replace(/[^a-z0-9]/gi, '_').toLowerCase() +
+      '_production_plan.docx';
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error('Production Plan Word Export Error:', error);
+    alert(
+      error.message ||
+      'The Production Plan Word export failed.'
+    );
+  }
+}
+
+
+async function downloadProductionPlanPDF() {
+  if (!currentResult) {
+    alert('No production to download.');
+    return;
+  }
+
+  try {
+    const pkg = currentResult.finalPackage || currentResult;
+
+    const response = await fetch('/api/export-production-plan-pdf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        finalPackage: {
+          topic: currentResult.topic,
+          productionPlan: pkg.productionPlan || {}
+        },
+        topic:
+          pkg.productionPlan?.title ||
+          currentResult.topic ||
+          'CreatorPilot Production Plan'
+      })
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(
+        data.error || 'Production Plan PDF export failed.'
+      );
+    }
+
+    const blob = await response.blob();
+    const title =
+      pkg.productionPlan?.title ||
+      currentResult.topic ||
+      'creatorpilot_production_plan';
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download =
+      title.replace(/[^a-z0-9]/gi, '_').toLowerCase() +
+      '_production_plan.pdf';
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error('Production Plan PDF Export Error:', error);
+    alert(
+      error.message ||
+      'The Production Plan PDF export failed.'
+    );
+  }
+}
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
