@@ -16,9 +16,7 @@ async function runSingleClipTest() {
   console.log('====================================================');
   console.log('CreatorPilot: Single Video Clip Generation & Assembly Test');
   console.log('====================================================');
-  console.log(`Google Cloud Project : ${config.googleCloudProject}`);
-  console.log(`Google Cloud Location: ${config.googleCloudLocation}`);
-  console.log(`Veo Model            : ${process.env.VEO_MODEL || 'veo-3.1-generate-001'}`);
+  console.log(`Video Generation Mode: ${config.videoGenerationMode.toUpperCase()}`);
   console.log(`FFmpeg Available     : ${isFfmpegAvailable()}`);
 
   if (isFfmpegAvailable()) {

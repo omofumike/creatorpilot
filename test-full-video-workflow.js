@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { isFfmpegAvailable, getFfmpegPath, assembleVideos } from './lib/video/videoAssembler.js';
+import { createPlaceholderClipFile } from './lib/video/mockVideoGenerator.js';
 import {
   buildVeoPromptFromShot,
   normalizeShotDuration,
@@ -111,11 +112,15 @@ async function runFullVideoWorkflowTest() {
     fs.mkdirSync(clipsDir, { recursive: true });
   }
 
-  // Find any existing real clip or use single-shot test clip as source
+  // Find any existing clip or generate synthetic clip as source
+  let sourceClip;
   const existingClips = fs.readdirSync(clipsDir).filter(f => f.endsWith('.mp4'));
-  assert(existingClips.length > 0, 'Found existing Veo video clips in clips directory for assembly test');
-
-  const sourceClip = path.join(clipsDir, existingClips[0]);
+  if (existingClips.length > 0) {
+    sourceClip = path.join(clipsDir, existingClips[0]);
+  } else {
+    sourceClip = path.join(clipsDir, 'test_synthetic_source.mp4');
+    await createPlaceholderClipFile(sourceClip, 4);
+  }
   const sourceSize = fs.statSync(sourceClip).size;
   assert(sourceSize > 0, `Source clip is non-empty (${(sourceSize / 1024 / 1024).toFixed(2)} MB)`);
 

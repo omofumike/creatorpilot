@@ -1,4 +1,18 @@
-﻿import { GoogleGenAI } from '@google/genai';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const mode = (process.env.VIDEO_GENERATION_MODE || 'mock').toLowerCase().trim();
+if (mode !== 'real') {
+  console.log('====================================================');
+  console.log('SAFETY CHECK: Real Google Veo API test skipped.');
+  console.log(`Current VIDEO_GENERATION_MODE is: "${mode}" (default: mock).`);
+  console.log('No Google Cloud / Veo API calls were made.');
+  console.log('To run real Veo generation, set: VIDEO_GENERATION_MODE=real');
+  console.log('====================================================');
+  process.exit(0);
+}
+
+import { GoogleGenAI } from '@google/genai';
 
 const ai = new GoogleGenAI({
   vertexai: true,

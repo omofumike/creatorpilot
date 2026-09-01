@@ -15,9 +15,7 @@ async function runSingleShotTest() {
   console.log('====================================================');
   console.log('CreatorPilot: Single-Shot Full-Video Code Path Test');
   console.log('====================================================');
-  console.log(`Google Cloud Project  : ${config.googleCloudProject}`);
-  console.log(`Google Cloud Location : ${config.googleCloudLocation}`);
-  console.log(`Veo Model             : ${process.env.VEO_MODEL || 'veo-3.1-generate-001'}`);
+  console.log(`Video Generation Mode : ${config.videoGenerationMode.toUpperCase()}`);
 
   const testStoryboard = {
     title: 'Offshore Signal Discovery',

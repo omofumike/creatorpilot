@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { isFfmpegAvailable, getFfmpegPath, assembleVideos } from './lib/video/videoAssembler.js';
 import { classifyVeoError, saveVideoFile } from './lib/video/veoVideoGenerator.js';
+import { createPlaceholderClipFile } from './lib/video/mockVideoGenerator.js';
 import {
   buildVeoPromptFromShot,
   normalizeShotDuration,
@@ -84,10 +85,15 @@ async function runResilienceAndResumeTests() {
   // ----------------------------------------------------
   console.log('\n[Scenario 3] Testing existing clip detection and preservation across runs...');
   
-  // Find a real existing clip or create a dummy clip
+  // Find an existing clip or generate a placeholder clip
+  let realClipSource;
   const existingFiles = fs.readdirSync(clipsDir).filter(f => f.endsWith('.mp4'));
-  assert(existingFiles.length > 0, 'Found existing clips for testing');
-  const realClipSource = path.join(clipsDir, existingFiles[0]);
+  if (existingFiles.length > 0) {
+    realClipSource = path.join(clipsDir, existingFiles[0]);
+  } else {
+    realClipSource = path.join(clipsDir, 'test_resilience_source.mp4');
+    await createPlaceholderClipFile(realClipSource, 4);
+  }
 
   const testProductionId = `prod_test_resume_${Date.now()}`;
   
