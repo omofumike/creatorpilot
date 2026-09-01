@@ -142,3 +142,16 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 .env
+.env
+.env.local
+node_modules/
+public/videos/
+.vscode/
+*.bak
+*.backup
+*.WORKING.bak
+api-test.json
+shortfilm-test-output.txt
+public/videos/
+*.bak*
+*.backup*

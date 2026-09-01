@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1807,6 +1807,7 @@ body {
       <div class="tabs-header">
         <button class="tab-btn active" onclick="switchTab(event, 'tab-script')">Script</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-storyboard')">Storyboard</button>
+        <button class="tab-btn" id="tab-btn-video" onclick="switchTab(event, 'tab-video')">Generated Video</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-production')">Production Plan</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-quality')">Quality Review</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-research')">Research</button>
@@ -1857,13 +1858,84 @@ body {
       <div id="tab-storyboard" class="tab-panel">
         <div class="content-box">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem;">
-  <h3 id="storyboard-title" style="margin:0;">Video Visual Storyboard</h3>
-  <div class="export-actions">
-    <button type="button" class="secondary-btn" onclick="downloadStoryboardWord()">Download Word</button>
-    <button type="button" class="secondary-btn" onclick="downloadStoryboardPDF()">Download PDF</button>
-  </div>
-</div>
+            <h3 id="storyboard-title" style="margin:0;">Video Visual Storyboard</h3>
+            <div class="export-actions" style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
+              <button type="button" id="storyboard-generate-video-btn" class="secondary-btn" style="background: rgba(124, 92, 255, 0.22); border-color: rgba(124, 92, 255, 0.55); color: #fff; font-weight: 700;" onclick="generateVideoFromProduction()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;margin-right:4px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Generate Video
+              </button>
+              <button type="button" class="secondary-btn" onclick="downloadStoryboardWord()">Download Word</button>
+              <button type="button" class="secondary-btn" onclick="downloadStoryboardPDF()">Download PDF</button>
+            </div>
+          </div>
           <div class="storyboard-grid" id="storyboard-grid-list"></div>
+        </div>
+      </div>
+
+      <!-- Panel: Generated Video -->
+      <div id="tab-video" class="tab-panel">
+        <div class="content-box">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+            <h3 id="video-tab-title" style="margin:0;">Veo AI Video Generation</h3>
+            <div id="video-tab-actions" style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button type="button" id="video-action-generate-btn" class="secondary-btn" style="background: rgba(124, 92, 255, 0.22); border-color: rgba(124, 92, 255, 0.55); color: #fff; font-weight: 700;" onclick="generateVideoFromProduction()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;margin-right:4px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Generate Full Video
+              </button>
+              <button type="button" id="video-action-clip-btn" class="secondary-btn" onclick="generateVideoFromProduction({ singleClipOnly: true })">
+                Generate 1 Clip (Fast)
+              </button>
+            </div>
+          </div>
+
+          <!-- Video Ready / Empty State -->
+          <div id="video-empty-state" style="padding: 2rem 1rem; text-align: center; color: var(--subtitle);">
+            <p style="font-size: 1.05rem; margin-bottom: 0.75rem; color: var(--text);">Ready to turn your storyboard into video.</p>
+            <p style="max-width: 540px; margin: 0 auto 1.5rem; font-size: 0.88rem; line-height: 1.5;">
+              Use Google Veo to generate video clips based on your storyboard's visual descriptions and camera directions, assembled into a single MP4 with FFmpeg.
+            </p>
+            <div style="display:flex; justify-content:center; gap: 0.8rem; flex-wrap: wrap;">
+              <button type="button" class="secondary-btn" style="background: var(--accent); color: #fff; font-weight: 700; padding: 0.65rem 1.4rem;" onclick="generateVideoFromProduction()">
+                Generate Video with Veo
+              </button>
+              <button type="button" class="secondary-btn" onclick="generateVideoFromProduction({ singleClipOnly: true })">
+                Generate 1 Test Clip
+              </button>
+            </div>
+          </div>
+
+          <!-- Video Loading Progress State -->
+          <div id="video-loading-state" style="display: none; padding: 2.5rem 1rem; text-align: center;">
+            <div class="spinner" style="margin: 0 auto 1rem; width: 36px; height: 36px;"></div>
+            <h4 id="video-progress-message" style="color: var(--text); font-size: 1.15rem; margin-bottom: 0.5rem;">Veo AI is generating your video...</h4>
+            <p id="video-progress-sub" style="color: var(--subtitle); font-size: 0.88rem; max-width: 480px; margin: 0 auto;">
+              Generating storyboard shots with Google Veo and assembling the final MP4. Please wait...
+            </p>
+          </div>
+
+          <!-- Video Player Display State -->
+          <div id="video-player-section" style="display: none; text-align: center;">
+            <div style="margin: 0 auto 1.5rem; max-width: 800px; position: relative;">
+              <video id="final-video-player" controls playsinline preload="metadata" style="width: 100%; border-radius: 14px; background: #000; box-shadow: 0 16px 36px rgba(0,0,0,0.6); display: block;"></video>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+              <a id="download-video-btn" class="secondary-btn" style="background: var(--green); color: #07111f; font-weight: 800; display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.4rem; text-decoration: none;" href="#" download="creatorpilot_video.mp4">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download Video (MP4)
+              </a>
+              <button type="button" class="secondary-btn" onclick="generateVideoFromProduction()">
+                Re-generate Video
+              </button>
+            </div>
+
+            <!-- Clips Breakdown Gallery -->
+            <div id="video-clips-breakdown" style="text-align: left; margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.2rem; display: none;">
+              <h4 style="color: var(--text); font-size: 0.95rem; margin-bottom: 0.8rem;">Generated Video Clips</h4>
+              <div id="video-clips-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.8rem;"></div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -3700,7 +3772,58 @@ function stopLoadingMessageRotation() {
         });
       } else {
         storyboardGrid.innerHTML = '<p>No storyboard shots returned.</p>';
-      }      
+      }
+
+      // 4.5. Render/Restore Video Generation Tab
+      const videoEmptyState = document.getElementById('video-empty-state');
+      const videoLoadingState = document.getElementById('video-loading-state');
+      const videoPlayerSection = document.getElementById('video-player-section');
+      const finalVideoPlayer = document.getElementById('final-video-player');
+      const downloadVideoBtn = document.getElementById('download-video-btn');
+      const videoClipsBreakdown = document.getElementById('video-clips-breakdown');
+      const videoClipsList = document.getElementById('video-clips-list');
+
+      if (effectiveResult.generatedVideo && effectiveResult.generatedVideo.videoUrl) {
+        const vidData = effectiveResult.generatedVideo;
+        if (finalVideoPlayer) {
+          finalVideoPlayer.src = vidData.videoUrl;
+        }
+        if (downloadVideoBtn) {
+          downloadVideoBtn.href = vidData.videoUrl;
+          downloadVideoBtn.download = vidData.filename || 'creatorpilot_video.mp4';
+        }
+        if (Array.isArray(vidData.clips) && vidData.clips.length > 0 && videoClipsList && videoClipsBreakdown) {
+          videoClipsList.innerHTML = '';
+          vidData.clips.forEach(clip => {
+            const clipCard = document.createElement('div');
+            clipCard.className = 'content-box';
+            clipCard.style.padding = '0.75rem';
+            clipCard.style.fontSize = '0.8rem';
+            clipCard.innerHTML = `
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+                <strong style="color:var(--accent);">Shot #${clip.shotNumber}</strong>
+                <a href="${escapeHtml(clip.videoUrl)}" download="${escapeHtml(clip.filename)}" class="secondary-btn" style="padding:0.25rem 0.5rem;font-size:0.7rem;text-decoration:none;">Download Clip</a>
+              </div>
+              <p style="color:var(--subtitle);font-size:0.75rem;margin-bottom:0.4rem;line-height:1.35;max-height:60px;overflow:hidden;text-overflow:ellipsis;">
+                ${escapeHtml(clip.prompt || '')}
+              </p>
+              <video controls playsinline preload="none" src="${escapeHtml(clip.videoUrl)}" style="width:100%;border-radius:6px;background:#000;"></video>
+            `;
+            videoClipsList.appendChild(clipCard);
+          });
+          videoClipsBreakdown.style.display = 'block';
+        } else if (videoClipsBreakdown) {
+          videoClipsBreakdown.style.display = 'none';
+        }
+        if (videoPlayerSection) videoPlayerSection.style.display = 'block';
+        if (videoEmptyState) videoEmptyState.style.display = 'none';
+        if (videoLoadingState) videoLoadingState.style.display = 'none';
+      } else {
+        if (videoPlayerSection) videoPlayerSection.style.display = 'none';
+        if (videoLoadingState) videoLoadingState.style.display = 'none';
+        if (videoEmptyState) videoEmptyState.style.display = 'block';
+      }
+
       // 5. Render Production Plan Tab
       const prod = pkg.productionPlan || {};
       const tableBody =
@@ -4794,14 +4917,231 @@ async function downloadProductionPlanPDF() {
     );
   }
 }
+
+// ==========================================
+// CREATORPILOT VEO VIDEO GENERATION
+// ==========================================
+
+let isGeneratingVideo = false;
+let videoProgressInterval = null;
+
+const videoProgressMessages = [
+  "Veo AI is preparing the video shots...",
+  "Directing cinematography and camera movements...",
+  "Rendering high-definition frames with Google Veo...",
+  "Synthesizing motion and lighting...",
+  "Assembling final MP4 video with FFmpeg...",
+  "Finalizing video production..."
+];
+
+function startVideoProgressRotation() {
+  let progressIndex = 0;
+  const progressMsg = document.getElementById('video-progress-message');
+  const progressSub = document.getElementById('video-progress-sub');
+  
+  if (progressMsg) progressMsg.textContent = videoProgressMessages[0];
+  if (progressSub) progressSub.textContent = 'Generating storyboard shots with Google Veo and assembling the final MP4. Please wait...';
+
+  if (videoProgressInterval) clearInterval(videoProgressInterval);
+  videoProgressInterval = setInterval(() => {
+    if (progressIndex < videoProgressMessages.length - 1) {
+      progressIndex++;
+      if (progressMsg) progressMsg.textContent = videoProgressMessages[progressIndex];
+    }
+  }, 10000);
+}
+
+function stopVideoProgressRotation() {
+  if (videoProgressInterval) {
+    clearInterval(videoProgressInterval);
+    videoProgressInterval = null;
+  }
+}
+
+async function generateVideoFromProduction(options = {}) {
+  if (isGeneratingVideo) {
+    alert('Video generation is currently in progress. Please wait for it to complete.');
+    return;
+  }
+
+  if (!currentResult) {
+    alert('Please create or select a production first before generating video.');
+    return;
+  }
+
+  const exportPackage = (typeof getExportPackage === 'function')
+    ? getExportPackage()
+    : (currentResult.finalPackage || currentResult);
+
+  if (!exportPackage || !exportPackage.storyboard || !Array.isArray(exportPackage.storyboard.shots) || exportPackage.storyboard.shots.length === 0) {
+    alert('A storyboard with at least one shot is required to generate a video.');
+    return;
+  }
+
+  // Switch to the Generated Video tab
+  switchTab(null, 'tab-video');
+  const videoTabBtn = document.getElementById('tab-btn-video');
+  if (videoTabBtn) {
+    document.querySelectorAll('.tabs-header .tab-btn').forEach(btn => btn.classList.remove('active'));
+    videoTabBtn.classList.add('active');
+  }
+
+  const emptyState = document.getElementById('video-empty-state');
+  const loadingState = document.getElementById('video-loading-state');
+  const playerSection = document.getElementById('video-player-section');
+  const videoPlayer = document.getElementById('final-video-player');
+  const downloadBtn = document.getElementById('download-video-btn');
+  const clipsBreakdown = document.getElementById('video-clips-breakdown');
+  const clipsList = document.getElementById('video-clips-list');
+  const actionGenBtn = document.getElementById('video-action-generate-btn');
+  const actionClipBtn = document.getElementById('video-action-clip-btn');
+  const sbGenBtn = document.getElementById('storyboard-generate-video-btn');
+
+  // Update UI for loading
+  if (emptyState) emptyState.style.display = 'none';
+  if (playerSection) playerSection.style.display = 'none';
+  if (loadingState) loadingState.style.display = 'block';
+
+  if (actionGenBtn) actionGenBtn.disabled = true;
+  if (actionClipBtn) actionClipBtn.disabled = true;
+  if (sbGenBtn) sbGenBtn.disabled = true;
+
+  isGeneratingVideo = true;
+  startVideoProgressRotation();
+
+  try {
+    const lastProdId = currentResult.lastVideoProductionId || currentResult.generatedVideo?.productionId;
+    const reqOptions = {
+      ...(options || {}),
+      ...(lastProdId && !options.productionId ? { productionId: lastProdId } : {})
+    };
+
+    const payload = {
+      finalPackage: exportPackage,
+      topic: currentResult.topic || (topicInput ? topicInput.value : '') || exportPackage.topic || 'Current Production',
+      options: reqOptions
+    };
+
+    console.log('[CreatorPilot] Requesting video generation:', payload);
+
+    const response = await fetch('/api/generate-video', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    console.log('[CreatorPilot] Video generation response:', data);
+
+    if (!response.ok || data.success === false) {
+      // If partial clips or resumeState exists, preserve it in currentResult
+      if (data.resumeState?.productionId) {
+        currentResult.lastVideoProductionId = data.resumeState.productionId;
+      }
+      if (Array.isArray(data.clips) && data.clips.length > 0 && clipsList && clipsBreakdown) {
+        clipsList.innerHTML = '';
+        data.clips.forEach(clip => {
+          const clipCard = document.createElement('div');
+          clipCard.className = 'content-box';
+          clipCard.style.padding = '0.75rem';
+          clipCard.style.fontSize = '0.8rem';
+
+          clipCard.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+              <strong style="color:var(--accent);">Shot #${clip.shotNumber} (Completed)</strong>
+              <a href="${escapeHtml(clip.videoUrl)}" download="${escapeHtml(clip.filename)}" class="secondary-btn" style="padding:0.25rem 0.5rem;font-size:0.7rem;text-decoration:none;">Download Clip</a>
+            </div>
+            <p style="color:var(--subtitle);font-size:0.75rem;margin-bottom:0.4rem;line-height:1.35;max-height:60px;overflow:hidden;text-overflow:ellipsis;">
+              ${escapeHtml(clip.prompt || '')}
+            </p>
+            <video controls playsinline preload="none" src="${escapeHtml(clip.videoUrl)}" style="width:100%;border-radius:6px;background:#000;"></video>
+          `;
+          clipsList.appendChild(clipCard);
+        });
+        clipsBreakdown.style.display = 'block';
+        if (playerSection) playerSection.style.display = 'block';
+      }
+      throw new Error(data.error || 'Video generation failed.');
+    }
+
+    // Success: Populate Video Player
+    stopVideoProgressRotation();
+    if (loadingState) loadingState.style.display = 'none';
+
+    if (videoPlayer && data.videoUrl) {
+      videoPlayer.src = data.videoUrl;
+      videoPlayer.load();
+    }
+
+    if (downloadBtn && data.videoUrl) {
+      downloadBtn.href = data.videoUrl;
+      downloadBtn.download = data.filename || 'creatorpilot_video.mp4';
+    }
+
+    // Populate clips breakdown if multiple clips exist
+    if (Array.isArray(data.clips) && data.clips.length > 0 && clipsList && clipsBreakdown) {
+      clipsList.innerHTML = '';
+      data.clips.forEach(clip => {
+        const clipCard = document.createElement('div');
+        clipCard.className = 'content-box';
+        clipCard.style.padding = '0.75rem';
+        clipCard.style.fontSize = '0.8rem';
+
+        clipCard.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+            <strong style="color:var(--accent);">Shot #${clip.shotNumber}</strong>
+            <a href="${escapeHtml(clip.videoUrl)}" download="${escapeHtml(clip.filename)}" class="secondary-btn" style="padding:0.25rem 0.5rem;font-size:0.7rem;text-decoration:none;">Download Clip</a>
+          </div>
+          <p style="color:var(--subtitle);font-size:0.75rem;margin-bottom:0.4rem;line-height:1.35;max-height:60px;overflow:hidden;text-overflow:ellipsis;">
+            ${escapeHtml(clip.prompt || '')}
+          </p>
+          <video controls playsinline preload="none" src="${escapeHtml(clip.videoUrl)}" style="width:100%;border-radius:6px;background:#000;"></video>
+        `;
+        clipsList.appendChild(clipCard);
+      });
+      clipsBreakdown.style.display = 'block';
+    } else if (clipsBreakdown) {
+      clipsBreakdown.style.display = 'none';
+    }
+
+    if (playerSection) playerSection.style.display = 'block';
+
+    // Store in currentResult and persist
+    currentResult.generatedVideo = data;
+    if (data.productionId) {
+      currentResult.lastVideoProductionId = data.productionId;
+    }
+    if (typeof saveCurrentProduction === 'function') {
+      saveCurrentProduction();
+    }
+
+    if (typeof renderChatMessage === 'function') {
+      renderChatMessage('assistant', `Video generated successfully! You can watch the full MP4 or download it in the Generated Video tab.`);
+    }
+
+  } catch (error) {
+    stopVideoProgressRotation();
+    console.error('[CreatorPilot] Video generation error:', error);
+    if (loadingState) loadingState.style.display = 'none';
+    if (!clipsBreakdown || clipsBreakdown.style.display !== 'block') {
+      if (emptyState) emptyState.style.display = 'block';
+    }
+
+    alert(`Video generation error: ${error.message || error}`);
+  } finally {
+    isGeneratingVideo = false;
+    if (actionGenBtn) actionGenBtn.disabled = false;
+    if (actionClipBtn) actionClipBtn.disabled = false;
+    if (sbGenBtn) sbGenBtn.disabled = false;
+  }
+}
+
+window.generateVideoFromProduction = generateVideoFromProduction;
 </script>
 </body>
 </html>
-
-
-
-
-
 
 
 
